@@ -1,19 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { ThemeProvider } from 'styled-components'
-import './App.css';
 
 import When from './components/pages/When'
 import What from './components/pages/What'
 import Payment from './components/pages/Payment'
 import Header from './components/organisms/Header'
-import { theme } from './components/theme'
+import AppWrapper from './components/atoms/AppWrapper'
+import theme from './components/theme'
+import Style from './components/Style'
 
 function App() {
   return (
-    <div className="App">
-      <ThemeProvider theme={theme}>
-        <React.Fragment>
+    <ThemeProvider theme={theme}>
+      <React.Fragment>
+        <Style />
+        <AppWrapper>
           <Header />
           <Router>
             <Link to="/booking/when">Home</Link>
@@ -23,9 +25,9 @@ function App() {
             <Route path="/booking/what" component={What} />
             <Route path="/booking/details-and-payment" component={Payment} />
           </Router>
-        </React.Fragment>
-      </ThemeProvider>
-    </div>
+        </AppWrapper>
+      </React.Fragment>
+    </ThemeProvider>
   );
 }
 
