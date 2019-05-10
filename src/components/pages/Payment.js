@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import Header from '../organisms/Header'
+
 
 export default class Payment extends Component {
   componentDidMount() {
@@ -7,9 +9,9 @@ export default class Payment extends Component {
   
   render() {
     return (
-      <div>
-        payment
-      </div>
+      <React.Fragment>
+        <Header />
+      </React.Fragment>
     )
   }
 }
