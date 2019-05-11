@@ -67,8 +67,11 @@ export default class When extends Component {
             <DateWrapper>
               <Label>On:</Label>
               <DateInput >
-                <DateButtons />
-                <DatePickerBtn />
+              <DateButtons />
+                <DatePickerWrapper>
+                  <DatePickerBtn />
+                  <DatePicker />
+                </DatePickerWrapper>
               </DateInput>
             </DateWrapper>
             <div style={{width: `10em`, marginLeft: `2em`, flex: `none`, display: `inline-block`}}>
@@ -105,10 +108,16 @@ const DateInput = styled.div`
   background-color: ${p => p.theme.colors.base.bg.light};
 `
 
-const DatePickerBtn = styled.div`
+const DatePickerWrapper = styled.div`
   width: ${p => p.theme.spacing.inputHeight};
   height: 100%;
   flex: none;
+  position: relative;
+`
+
+const DatePickerBtn = styled.div`
+  width: 100%;
+  height: 100%;
   background: url('/img/icons/calendar.svg') no-repeat;
   background-size: 50%;
   background-position: center center;
