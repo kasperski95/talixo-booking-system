@@ -8,6 +8,12 @@ const Style = createGlobalStyle`
   html {
     background-color: ${props => props.theme.colors.base.bg.dark};
   }
+
+  body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 `
 
 export default Style;

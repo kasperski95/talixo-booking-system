@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import Header from '../organisms/Header'
+import { ResxContext } from '../resx.js'
+
 
 export default class What extends Component {
-  componentDidMount() {
-    document.title = '[2/3] Prebook your Taxi or Limousine - Choosing a Car'
-  }
   
   render() {
+    const data = this.context;
+    document.title = `[2/3] ${data.title} - ${data.chooseCar}`
+
     return (
       <React.Fragment>
         <Header />
@@ -14,3 +16,5 @@ export default class What extends Component {
     )
   }
 }
+What.contextType = ResxContext;
+

@@ -25,9 +25,16 @@ const theme = {
     },
 
     accent: {
+      light: '#fe7d0a',
       main: '#ff4800'
     }
-  }
+  },
+
+  spacing: {
+    header: '2.25em',
+  },
+
+  shadows: ['0 4px 6px -1px rgba(0,0,0,0.9)']
 }
 
 export default theme;
