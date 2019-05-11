@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { ResxContext } from '../resx'
 import styled from 'styled-components'
 import moment from 'moment'
+import { updateBooking } from '../../actions'
 
 class DateButtons extends Component {
   getDayComponent(props) {
@@ -35,12 +36,34 @@ class DateButtons extends Component {
   
   render() {
     const Day = props => this.getDayComponent(props)
+    let dates = [];
+
+    const curDate = moment(this.props.booking.date, 'YYYY-MM-DD');
+
+    if (curDate.format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) {
+      dates.push(curDate)
+      dates.push(moment(curDate).add(1, 'days'))
+      dates.push(moment(curDate).add(2, 'days'))
+    }
+
+    if (moment(curDate.format('YYYY-MM-DD'), 'YYYY-MM-DD') > moment(moment().format('YYYY-MM-DD'), 'YYYY-MM-DD')) {
+      dates.push(moment(curDate).add(-1, 'days'))
+      dates.push(curDate)
+      dates.push(moment(curDate).add(1, 'days'))
+    }
 
     return (
       <Wrapper>
-        <Day active date={'2019-05-11'} />
-        <Day date={'2019-05-12'} />
-        <Day date={'2019-05-13'} />
+        {dates.map(el => {
+          const active = el.format('YYYY-MM-DD') === this.props.booking.date
+          return <Day
+            onClick={() => this.props.updateBooking({...this.props.booking, date: el.format('YYYY-MM-DD')})}
+            key={`day-${el.format('YYYY-MM-DD')}`}
+            active={active}
+            date={el.format('YYYY-MM-DD')}
+          />
+        })}
+        
       </Wrapper>
     )
   }
@@ -50,8 +73,10 @@ DateButtons.contextType = ResxContext;
 
 
 const mapStateToProps = state => ({
+  booking: state.booking
 })
 const mapDispatchToProps = dispatch => ({
+  updateBooking: (payload) => dispatch(updateBooking(payload))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DateButtons)
 
@@ -68,6 +93,8 @@ const DayWrapper = styled.div`
   display: inline-flex;
   box-sizing: border-box;
   padding: 0.4em;
+  cursor: pointer;
+  user-select: none;
 `
 
 const Icon = styled.div`

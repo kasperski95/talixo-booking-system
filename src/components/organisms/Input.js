@@ -11,10 +11,11 @@ class Input extends Component {
     const tooltip = this.props.tooltip? true : false;
     return (
       <React.Fragment>
-        <If condition={this.props.label && !this.props.icon}>
-          <Label>{this.props.label}</Label>
-        </If>
+        
         <Wrapper style={this.props.style} respectTooltipBtn={tooltip}>
+          <If condition={this.props.label && !this.props.icon}>
+            <Label>{this.props.label}</Label>
+          </If>
           <If condition={tooltip}>
             <TooltipBtn>?</TooltipBtn>
             <Tooltip className='tooltip'>
