@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { updateDdmVisibility } from '../../actions'
+import ArrowDown from '../atoms/ArrowDown'
+
 
 
 function DropDownBtn(props) {
@@ -13,11 +15,7 @@ function DropDownBtn(props) {
       >
         <div style={{position: `relative`, paddingRight: `1.5em`}}>
           {props.label}
-          <GlyphPositioner>
-            <GlyphWrapper expanded={props.expanded}>
-              <Glyph />
-            </GlyphWrapper>
-          </GlyphPositioner>
+          <ArrowDown expanded={props.expanded} />
         </div>
       </Wrapper>
       {props.children}
@@ -44,35 +42,3 @@ const Wrapper = styled.div`
   text-align: left;
   cursor: pointer;
 `
-
-const Glyph = styled.div`
-  transform: translate(0.25em, 0.5em) scale(2, 1.75) rotate(90deg);
-  &::before {
-    content: "\\203a";
-    color: inherit;
-  }
-`
-
-const GlyphWrapper = styled.div`
-  width: 1em;
-  height: 1em;
-  transform-origin: 50% 55%;
-  overflow: hidden;
-  color: inherit;
-  transform: scaleY(${props => props.expanded? -1 : 1});
-  transition: transform 0.25s;
-`
-
-const GlyphPositioner = styled.div`
-  position: absolute;
-  top: 0.1em;
-  right: 0em;
-  
-`
-
-
-
-
-
-
-

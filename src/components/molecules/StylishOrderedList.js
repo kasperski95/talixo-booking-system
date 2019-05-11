@@ -23,6 +23,7 @@ export default styled.ol`
     font-size: 1.4em;
     width: 1.25em;
     height: 1.25em;
+    font-weight: 600;
     margin-right: ${p => p.theme.spacing.gutters[0]};
     color: ${p => p.theme.colors.primary.txt.dark};
     border: 0.125em solid ${p => p.theme.colors.primary.txt.dark};

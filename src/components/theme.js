@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { connect } from 'react-redux'
 
 
@@ -19,7 +19,7 @@ const theme = {
     primary: {
       bg: {
         main: '#3e444C',
-        dark: '#393f46',
+        dark: '#1D2630',
       },
 
       txt: {
@@ -38,7 +38,9 @@ const theme = {
   spacing: {
     header: '2.25em',
     maxWidth: '980px',
-    gutters: ['0.5em', '1em', '1.5em']
+    inputHeight: '3em',
+    gutters: ['0.5em', '1em', '1.5em', '2em', '2.5em', '3em'],
+    rounding: '0.25em'
   },
 
 

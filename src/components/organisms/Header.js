@@ -91,9 +91,9 @@ const DropDownMenuItem = styled.li`
   }
 `
 
-const Logo = styled.img.attrs({
+const Logo = styled.img.attrs(p => ({
   src: '/img/talixo_logo.png'
-})`
+}))`
   height: 1.3725em;
   flex: 0 0;
 `;
