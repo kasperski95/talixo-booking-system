@@ -1,3 +1,7 @@
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
+
 const theme = {
   colors: {
     base: {
@@ -30,11 +34,55 @@ const theme = {
     }
   },
 
+
   spacing: {
     header: '2.25em',
+    maxWidth: '980px',
+    gutters: ['0.5em', '1em', '1.5em']
   },
 
-  shadows: ['0 4px 6px -1px rgba(0,0,0,0.9)']
+
+  shadows: ['0 0.25em 0.375em -1px rgba(0,0,0,0.9)'],
+
+
+  breakpoints: {
+    md: '768px',
+    lg: '1024px'
+  }
 }
 
 export default theme;
+
+
+
+class Sm extends Component {
+  render() {
+    if (this.props.windowWidth < parseInt(theme.breakpoints.md))
+      return this.props.children
+
+    if (this.props.else)
+      return this.props.else
+
+    return (null)
+  }
+}
+
+class Md extends Component {
+  render() {
+    if (this.props.windowWidth < parseInt(theme.breakpoints.lg))
+      return this.props.children
+
+    if (this.props.else)
+      return this.props.else
+
+    return (null)
+  }
+}
+
+// ===============================================================================
+// REDUX
+const mapStateToProps = state => ({
+  windowWidth: state.windowWidth
+})
+export const SM = connect(mapStateToProps, null)(Sm)
+export const MD = connect(mapStateToProps, null)(Md)

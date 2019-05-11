@@ -11,9 +11,18 @@ import AppWrapper from './components/atoms/AppWrapper'
 import theme from './components/theme'
 import Style from './components/Style'
 
+import { updateWindowWidth } from './actions/'
 
 
 class App extends Component {
+  constructor() {
+    super();
+
+    window.addEventListener('resize', () => {
+      this.props.updateWindowWidthInfo(document.documentElement.clientWidth);
+    }, true)
+  }
+
   getResx() {
     if (Object.keys(resx[this.props.lang]).length < Object.keys(resx['en']).length) {
       console.error(`Lanaguage "${this.props.lang}" is not completely implemented.`);
@@ -21,9 +30,9 @@ class App extends Component {
     return resx[this.props.lang];
   }
 
+  
   render() {
     return (
-      
         <ThemeProvider theme={theme}>
           <ResxContext.Provider value={this.getResx()}>
             <React.Fragment>
@@ -47,7 +56,6 @@ class App extends Component {
             </React.Fragment>
           </ResxContext.Provider>
         </ThemeProvider>
-      
     );
   }
 }
@@ -55,4 +63,7 @@ class App extends Component {
 const mapStateToProps = state => ({
   lang: state.lang
 })
-export default connect(mapStateToProps)(App)
+const mapDispatchToProps = dispatch => ({
+  updateWindowWidthInfo: val => dispatch(updateWindowWidth(val))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(App)
