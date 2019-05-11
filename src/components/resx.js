@@ -8,6 +8,17 @@ const resx = {
       label: 'English',
       iconOffset: 0,
     },
+    days: [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ],
+    today: 'Today',
+    tomorrow: 'Tomorrow',
     title: 'Prebook your Taxi or Limousine',
     whenAndWhen: 'Where & When',
     chooseCar: 'Choose a Car',

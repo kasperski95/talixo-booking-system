@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import Header from '../organisms/Header'
 import Input from '../organisms/Input'
+import DatePicker from '../organisms/DatePicker'
+import DateButtons from '../organisms/DateButtons'
 import StylishOrderedList from '../molecules/StylishOrderedList'
 import Page from '../molecules/Page'
 import { ResxContext } from '../resx'
 import { SM } from '../theme'
+import styled from 'styled-components'
+
 
 export default class When extends Component {
   
@@ -58,21 +62,21 @@ export default class When extends Component {
             dropdownBtn
           />
 
-          {/* 
-          <div>
-            <Input
-              labelRenderer={{}}
-              leftElementRenderer={{}}
-              rightElementRenderer={{}}
-              noTextInput
-            />
-            <Input
-              label='At:'
-              inputRenderer={{}}
-            />
+          
+          <div style={{display: `flex`, marginTop: '-0.125em'}}>
+            <DateWrapper>
+              <Label>On:</Label>
+              <DateInput >
+                <DateButtons />
+                <DatePickerBtn />
+              </DateInput>
+            </DateWrapper>
+            <div style={{width: `10em`, marginLeft: `2em`, flex: `none`, display: `inline-block`}}>
+              <Input label='At:'/>
+            </div>
           </div>
 
-          <Input
+          {/* <Input
             label='Voucher code (optional):'
           /> */}
 
@@ -82,3 +86,42 @@ export default class When extends Component {
   }
 }
 When.contextType = ResxContext;
+
+
+
+const DateWrapper = styled.div`
+  width: 100%;
+  flex: 1;
+  margin: 0.125em 0em;
+  display: inline-block;
+  border-radius: ${p => p.theme.spacing.rounding};
+`
+
+const DateInput = styled.div`
+  display: flex;
+  width: 100%;
+  height: ${p => p.theme.spacing.inputHeight};
+  border-radius: ${p => p.theme.spacing.rounding};
+  background-color: ${p => p.theme.colors.base.bg.light};
+`
+
+const DatePickerBtn = styled.div`
+  width: ${p => p.theme.spacing.inputHeight};
+  height: 100%;
+  flex: none;
+  background: url('/img/icons/calendar.svg') no-repeat;
+  background-size: 50%;
+  background-position: center center;
+  display: inline-block;
+  border-left: 2px solid ${p => p.theme.colors.base.bg.dark};
+  cursor: pointer;
+`
+
+const Label = styled.div`
+  font-size: 0.875em;
+  color: ${p => p.theme.colors.primary.txt.main};
+
+  @media (min-width: ${[p => p.theme.breakpoints.md]}) {
+    display: none;
+  }
+`

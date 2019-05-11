@@ -44,7 +44,7 @@ const theme = {
   },
 
 
-  shadows: ['0 0.25em 0.375em -1px rgba(0,0,0,0.9)'],
+  shadows: ['0 0.25em 0.375em -1px rgba(0,0,0,0.5)'],
 
 
   breakpoints: {

@@ -14,7 +14,7 @@ class Input extends Component {
         <If condition={this.props.label && !this.props.icon}>
           <Label>{this.props.label}</Label>
         </If>
-        <Wrapper respectTooltipBtn={tooltip}>
+        <Wrapper style={this.props.style} respectTooltipBtn={tooltip}>
           <If condition={tooltip}>
             <TooltipBtn>?</TooltipBtn>
             <Tooltip className='tooltip'>
@@ -65,6 +65,7 @@ const tooltipBtnInset = '2.25em';
 const Wrapper = styled.div`  
   width: ${p => p.respectTooltipBtn? `calc(100% - ${tooltipBtnInset})` : `100%`};
   position: relative;
+  margin: 0.125em 0em;
 
   @media (min-width: ${[p => p.theme.breakpoints.md]}) {
     width: 100%;
@@ -72,10 +73,8 @@ const Wrapper = styled.div`
 `
 
 const InputWrapper = styled.div`
-  
   height: ${p => p.theme.spacing.inputHeight};
   background-color: ${p => p.theme.colors.base.bg.light};
-  margin: 0.125em 0em;
   display: flex;
   overflow: hidden;
   border-radius: ${p => p.theme.spacing.rounding};
@@ -110,7 +109,7 @@ const Icon = styled.div`
   height: ${p => p.theme.spacing.inputHeight};
   display: inline-block;
   position: relative;
-  border-left: ${p => p.leftSeparator? `2px solid ${p.theme.colors.base.txt.light}` : 'none'};
+  border-left: ${p => p.leftSeparator? `2px solid ${p.theme.colors.base.bg.dark}` : 'none'};
   flex: none;
 `
 
@@ -162,7 +161,8 @@ const Tooltip = styled.div`
   padding: 0.5em 0.75em;
   background-color: black;
   border-radius: ${p => p.theme.spacing.rounding};
-  color: white;
+  color: rgba(255,255,255,0.75);
   z-index: 100;
   transform: translateY(calc(100% + 0.125em));
+  box-shadow: ${p => p.theme.shadows[0]};
 `
