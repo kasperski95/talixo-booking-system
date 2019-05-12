@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"
 import { ThemeProvider } from 'styled-components'
 import resx, { ResxContext } from './components/resx'
+import styled from 'styled-components'
 
 import WhenPage from './components/pages/When'
 import WhatPage from './components/pages/What'
@@ -11,7 +12,10 @@ import AppWrapper from './components/atoms/AppWrapper'
 import theme from './components/theme'
 import Style from './components/Style'
 
-import { updateWindowWidth } from './actions/'
+import { 
+  updateWindowWidth,
+  updatePopupHiderVisibility
+} from './actions/'
 
 
 class App extends Component {
@@ -37,6 +41,10 @@ class App extends Component {
           <ResxContext.Provider value={this.getResx()}>
             <React.Fragment>
               <Style />
+              <PopupHider
+                style={{display: this.props.popupHiderVisibility? 'block' : 'none'}}
+                onClick={() => this.props.hidePopups()}
+              />
               <AppWrapper>
                 <Router>
                   {/* <Link to="/booking/when">Home</Link>
@@ -61,9 +69,23 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  lang: state.lang
+  lang: state.lang,
+  popupHiderVisibility: state.popupHiderVisibility
 })
 const mapDispatchToProps = dispatch => ({
-  updateWindowWidthInfo: val => dispatch(updateWindowWidth(val))
+  updateWindowWidthInfo: val => dispatch(updateWindowWidth(val)),
+  hidePopups: () => dispatch(updatePopupHiderVisibility(false))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(App)
+
+
+
+const PopupHider = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* background-color: rgba(0,0,0,0.25); */
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+`

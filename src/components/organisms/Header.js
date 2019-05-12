@@ -26,7 +26,7 @@ class Header extends Component {
           </HeaderContent>
 
           <DropDownMenu
-            style={this.props.dropdownMenuVisible? {display: `block`} : {display: `none`}}
+            style={{visibility: this.props.dropdownMenuVisible? 'visible' : 'hidden'}}
             onMouseOver={(e) => {this.props.updateDdmVisibility(true);}}
             onMouseLeave={(e) => {this.props.updateDdmVisibility(false);}}
           >

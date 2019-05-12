@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Arrow from '../atoms/Arrow'
-import { updateBooking } from '../../actions'
+import {
+  updateBooking,
+  updateDatepickerVisibility
+} from '../../actions'
 import moment from 'moment'
 import { ResxContext } from '../resx'
 
@@ -101,10 +104,13 @@ class DatePicker extends Component {
                     disabled={disabled}
                     active={active}
                     onClick={() => {
-                      if (!disabled) 
+                      if (!disabled) {
                         this.props.updateBooking({
-                        ...this.props.booking, date: day.format('YYYY-MM-DD')
-                    })}}
+                          ...this.props.booking, date: day.format('YYYY-MM-DD')
+                        })
+                        this.props.updateDatepickerVisibility(false);
+                      }
+                    }}
                   >
                     {day.format('D')}
                   </Day>
@@ -127,7 +133,9 @@ const mapStateToProps = state => ({
   booking: state.booking
 })
 const mapDispatchToProps = dispatch => ({
-  updateBooking: (payload) => dispatch(updateBooking(payload))
+  updateBooking: (payload) => dispatch(updateBooking(payload)),
+  updateDatepickerVisibility: payload => dispatch(updateDatepickerVisibility(payload))
+
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DatePicker)
 
@@ -140,12 +148,13 @@ const Wrapper = styled.div`
   position: absolute;
   right: 0;
   bottom: 0;
-  z-index: 50;
+  z-index: 1000;
   padding: ${p => p.theme.spacing.gutters[0]};
   border-radius: ${p => p.theme.spacing.rounding};
   box-shadow: ${p => p.theme.shadows[0]};
   transform: translateY(calc(100% + 0.125em));
   overflow: hidden;
+  transition: opacity 0.1s;
 `
 
 const Header = styled.div`

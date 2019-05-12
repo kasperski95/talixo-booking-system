@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import Header from '../organisms/Header'
 import Input from '../organisms/Input'
 import DatePicker from '../organisms/DatePicker'
@@ -8,9 +9,9 @@ import Page from '../molecules/Page'
 import { ResxContext } from '../resx'
 import { SM } from '../theme'
 import styled from 'styled-components'
+import { updateDatepickerVisibility } from '../../actions'
 
-
-export default class When extends Component {
+class When extends Component {
   
   render() {
     const data = this.context
@@ -67,10 +68,16 @@ export default class When extends Component {
             <DateWrapper>
               <Label>On:</Label>
               <DateInput >
-              <DateButtons />
+                <DateButtons />
                 <DatePickerWrapper>
-                  <DatePickerBtn />
-                  <DatePicker />
+                  <DatePickerBtn
+                    onClick={() => this.props.updateDatepickerVisibility(!this.props.datepickerIsVisible)}
+                  />
+                  <DatePicker 
+                    style={{
+                      display: this.props.datepickerIsVisible? 'block' : 'none'
+                    }}
+                  />
                 </DatePickerWrapper>
               </DateInput>
             </DateWrapper>
@@ -89,6 +96,18 @@ export default class When extends Component {
   }
 }
 When.contextType = ResxContext;
+
+
+
+
+const mapStateToProps = state => ({
+  datepickerIsVisible: state.datepickerVisibility
+})
+const mapDispatchToProps = dispatch => ({
+  updateDatepickerVisibility: payload => dispatch(updateDatepickerVisibility(payload))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(When)
+
 
 
 
