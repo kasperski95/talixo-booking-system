@@ -2,7 +2,7 @@ export default function If(props) {
   if (props.then && props.chilhdren)
     console.error(`Do not use attribute "then" and "children" together`);
 
-  if (props.condition === true) {
+  if (props.condition) {
     if (props.then)
       return props.then
     if (props.children)

@@ -65,7 +65,7 @@ class When extends Component {
           />
 
           
-          <div style={{display: `flex`, marginTop: '-0.125em'}}>
+          <div style={{display: `flex`, margin: '-0.125em 0em'}}>
             <DateWrapper>
               <Label>On:</Label>
               <DateInput >
@@ -87,7 +87,18 @@ class When extends Component {
             </div>
           </div>
 
-          <List>
+          
+          <Input
+            dropdownBtn
+            style={{
+              width: '33.333%'
+            }}
+
+            iconStyle={{
+              background: 'url(/img/icons/more-options-icons.png)',
+              backgroundPosition: '0 0'
+            }}
+          >
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -95,22 +106,7 @@ class When extends Component {
             <option>5</option>
             <option>6</option>
             <option>7</option>
-          </List>
-
-          <List>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-          </List>
-
-          <List>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </List>
+          </Input>
 
           {/* <Input
             label='Voucher code (optional):'

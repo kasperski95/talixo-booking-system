@@ -4,48 +4,75 @@ import styled from 'styled-components'
 import ArrowDown from '../atoms/ArrowDown'
 import If from '../atoms/If'
 import Triangle from '../atoms/Triangle'
+import List from '../atoms/List'
+import {
+  updatePopupHiderVisibility
+} from '../../actions'
 
 
 class Input extends Component {
+  state = {
+    expanded: false
+  }
+
+  handleExpansion = () => {
+    //this.props.updatePopupHiderVisibility(true)
+    this.setState({...this.state, expanded: true})
+  }
+
   render() {
     const tooltip = this.props.tooltip? true : false;
     return (
-      <React.Fragment>
-        
-        <Wrapper style={this.props.style} respectTooltipBtn={tooltip}>
+      <Wrapper style={this.props.style} respectTooltipBtn={tooltip}>
+        <If condition={this.props.label && !this.props.icon}>
+          <Label>{this.props.label}</Label>
+        </If>
+        <If condition={tooltip}>
+          <TooltipBtn>?</TooltipBtn>
+          <Tooltip className='tooltip'>
+            <React.Fragment>
+              <Triangle color='black' size='12px' style={{position: 'absolute', top: '-12px'}} />
+              {this.props.tooltip}
+            </React.Fragment>
+          </Tooltip>
+        </If>
+        <InputWrapper>
           <If condition={this.props.label && !this.props.icon}>
-            <Label>{this.props.label}</Label>
+            <InlineLabel>{this.props.label}</InlineLabel>
           </If>
-          <If condition={tooltip}>
-            <TooltipBtn>?</TooltipBtn>
-            <Tooltip className='tooltip'>
-              <React.Fragment>
-                <Triangle color='black' size='12px' style={{position: 'absolute', top: '-12px'}} />
-                {this.props.tooltip}
-              </React.Fragment>
-            </Tooltip>
+          <If condition={this.props.icon}>
+            <Icon />
           </If>
-          <InputWrapper>
-            <If condition={this.props.label && !this.props.icon}>
-              <InlineLabel>{this.props.label}</InlineLabel>
-            </If>
-            <If condition={this.props.icon}>
-              <Icon />
-            </If>
-            <If condition={!this.props.noTextInput}>
-              <TextInput
-                roundLeft={!this.props.icon && !this.props.label}
-                onChange={this.props.onChange}
-                placeholder={this.props.placeholder} />
-            </If>
-            <If condition={this.props.dropdownBtn}>
-              <Icon leftSeparator style={{opacity: this.props.onDropdownClick? 1 : 0.5}}>
-                <ArrowDown style={{fontSize: `2em`, top: `50%`, left: `50%`, transform: `translate(-50%, -50%)`}} />
-              </Icon>
-            </If> 
-          </InputWrapper>
-        </Wrapper>
-      </React.Fragment>
+          <If condition={!this.props.noTextInput}>
+            <TextInput
+              roundLeft={!this.props.icon && !this.props.label}
+              onChange={this.props.onChange}
+              placeholder={this.props.placeholder} />
+          </If>
+          <If condition={this.props.dropdownBtn}>
+            <Icon leftSeparator
+              onClick={() => {this.handleExpansion()}}
+              style={{opacity: this.props.onDropdownClick? 1 : 0.5}}
+            >
+              <ArrowDown style={{fontSize: `2em`, top: `50%`, left: `50%`, transform: `translate(-50%, -50%)`}} />
+            </Icon>
+          </If> 
+        </InputWrapper>
+        <If condition={this.props.children}>
+          <List
+            style={{
+              display: (this.state.expanded)? 'block' : 'none',
+              position: 'absolute',
+              zIndex: 1000,
+              right: 0,
+              bottom: 0,
+              transform: 'translateY(calc(100% + 0.125em))'
+            }}
+          >
+            {this.props.children}
+          </List>
+        </If>
+      </Wrapper>
     )
   }
 }
@@ -53,8 +80,12 @@ class Input extends Component {
 
 
 const mapStateToProps = state => ({
+  datepickerIsVisible: state.datepickerVisibility
 })
 const mapDispatchToProps = dispatch => ({
+  updatePopupHiderVisibility: val => {
+    dispatch(updatePopupHiderVisibility(val))
+  }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Input)
 

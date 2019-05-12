@@ -14,7 +14,8 @@ export default function(props) {
         borderRadius: theme.spacing.rounding,
         overflow: 'hidden',
         boxShadow: theme.shadows[0],
-        display: 'inline-block'
+        display: 'inline-block',
+        ...props.style
       }}
 
       trackYProps={{
