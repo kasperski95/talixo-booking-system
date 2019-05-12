@@ -10,6 +10,7 @@ import { ResxContext } from '../resx'
 import { SM } from '../theme'
 import styled from 'styled-components'
 import { updateDatepickerVisibility } from '../../actions'
+import List from '../atoms/List'
 
 class When extends Component {
   
@@ -85,6 +86,31 @@ class When extends Component {
               <Input label='At:'/>
             </div>
           </div>
+
+          <List>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+          </List>
+
+          <List>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </List>
+
+          <List>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </List>
 
           {/* <Input
             label='Voucher code (optional):'
