@@ -16,7 +16,12 @@ const initialState = {
   windowWidth: parseInt(document.documentElement.clientWidth),
   booking: {
     date: moment().format('YYYY-MM-DD'),
-    hour: '12:00'
+    hour: '12:00',
+    passengers: 1,
+    luggage: 0,
+    equipment: 0,
+    animals: 0,
+    children: 0
   },
   datepickerVisibility: false,
   popupHiderVisibility: false

@@ -27,7 +27,7 @@ class DateButtons extends Component {
       <DayWrapper {...props}>
         <Icon active={props.active} />
         <TextWrapper>
-          <DateLabel>{dateLabel}</DateLabel>
+          <DateLabel active={props.active}>{dateLabel}</DateLabel>
           <DayName>{day}</DayName>
         </TextWrapper>
       </DayWrapper>
@@ -117,7 +117,7 @@ const DateLabel = styled.div`
   align-items: flex-end;
   font-size: 0.8em;
   font-weight: bold;
-  color: ${p => p.theme.colors.primary.bg.main};
+  color: ${p => p.active? p.theme.colors.accent.main : p.theme.colors.primary.bg.main};
   width: 100%;
   height: 50%;
 `

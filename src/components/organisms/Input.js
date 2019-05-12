@@ -48,11 +48,19 @@ class Input extends Component {
           <If condition={!this.props.noTextInput}>
             <TextInput
               className={this.props.selectOnly? 'no-outline' : ''}
-              style={{cursor: this.props.selectOnly? 'pointer' : 'default'}}
+              style={{
+                cursor: this.props.selectOnly? 'pointer' : 'default',
+                textAlign: this.props.selectOnly? 'center' : 'left'
+              }}
               readOnly={this.props.selectOnly}
               roundLeft={!this.props.iconStyle && !this.props.label}
-              onChange={this.props.onChange}
-              placeholder={this.props.placeholder} />
+              onChange={() => {
+                if (!this.props.selectOnly)
+                  this.props.onChange()
+              }}  
+              placeholder={this.props.placeholder}
+              value={this.props.selectOnly? this.props.value : ''}
+            />
           </If>
           <If condition={this.props.dropdownBtn}>
             <Icon leftSeparator
@@ -64,7 +72,14 @@ class Input extends Component {
                 opacity: this.props.selectOnly? 1 : 0.5              
               }}
             >
-              <ArrowDown style={{fontSize: `2em`, top: `50%`, left: `50%`, transform: `translate(-50%, -50%)`}}
+              <ArrowDown
+                style={{
+                  fontSize: `2em`,
+                  top: `50%`,
+                  left: `50%`,
+                  transform: `translate(-50%, -50%) scaleY(${this.state.expanded? -1 : 1})`,
+                  transition: 'transform 0.25s'
+                }}
               />
             </Icon>
           </If> 
@@ -88,7 +103,11 @@ class Input extends Component {
               const className = child.props.children == this.props.value? 'active' : ''
               return React.cloneElement(child, {
                 key: child.props.children,
-                className: className
+                className: className,
+                onClick: () => {
+                  this.props.onChange(child.props.children)
+                  this.setState({expanded: false})
+                }
               })
             })}
           </List>
@@ -114,7 +133,6 @@ const tooltipBtnInset = '2.25em';
 const Wrapper = styled.div`  
   width: ${p => p.respectTooltipBtn? `calc(100% - ${tooltipBtnInset})` : `100%`};
   position: relative;
-  margin: 0.125em 0em;
 
   @media (min-width: ${[p => p.theme.breakpoints.md]}) {
     width: 100%;

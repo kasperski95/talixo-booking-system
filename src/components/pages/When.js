@@ -9,7 +9,13 @@ import Page from '../molecules/Page'
 import { ResxContext } from '../resx'
 import { SM } from '../theme'
 import styled from 'styled-components'
-import { updateDatepickerVisibility } from '../../actions'
+import { 
+  updateDatepickerVisibility,
+  updateBooking
+} from '../../actions'
+import Row from '../atoms/Row'
+import theme from '../theme'
+
 
 class When extends Component {
   
@@ -49,69 +55,172 @@ class When extends Component {
             }
           />
 
-          <Input
-            label='Pick up:'
-            placeholder='e.g. Torstraße 124, Berlin'
-            tooltip='Please provide a street address, airport name or hotel name.'
-            dropdownBtn
-          />
 
-          <Input
-            label='Destination:'
-            placeholder='e.g. Tegel Airport'
-            tooltip='Please provide a street address, airport name or hotel name.'
-            dropdownBtn
-          />
+          <Form>
+            <Row>
+              {/* FROM */}
+              <Input
+                label='Pick up:'
+                placeholder='e.g. Torstraße 124, Berlin'
+                tooltip='Please provide a street address, airport name or hotel name.'
+                dropdownBtn
+              />
+            </Row>
 
-          
-          <div style={{display: `flex`, margin: '-0.125em 0em'}}>
-            <DateWrapper>
-              <Label>On:</Label>
-              <DateInput >
-                <DateButtons />
-                <DatePickerWrapper>
-                  <DatePickerBtn
-                    onClick={() => this.props.updateDatepickerVisibility(!this.props.datepickerIsVisible)}
-                  />
-                  <DatePicker 
-                    style={{
-                      display: this.props.datepickerIsVisible? 'block' : 'none'
-                    }}
-                  />
-                </DatePickerWrapper>
-              </DateInput>
-            </DateWrapper>
-            <div style={{width: `10em`, marginLeft: `2em`, flex: `none`, display: `inline-block`}}>
-              <Input label='At:'/>
-            </div>
-          </div>
+            <Row>
+              {/* TO */}
+              <Input
+                label='Destination:'
+                placeholder='e.g. Tegel Airport'
+                tooltip='Please provide a street address, airport name or hotel name.'
+                dropdownBtn
+              />
+            </Row>
+            
+            <Row style={{display: `flex`}}>
+              {/* DATE */}
+              <DateWrapper>
+                <Label>On:</Label>
+                <DateInput >
+                  <DateButtons />
+                  <DatePickerWrapper>
+                    <DatePickerBtn
+                      onClick={() => this.props.updateDatepickerVisibility(!this.props.datepickerIsVisible)}
+                    />
+                    <DatePicker 
+                      style={{
+                        display: this.props.datepickerIsVisible? 'block' : 'none'
+                      }}
+                    />
+                  </DatePickerWrapper>
+                </DateInput>
+              </DateWrapper>
 
-          
-          <Input
-            selectOnly
-            value={1}
-            dropdownBtn
-            style={{
-              width: '33.333%'
-            }}
-            iconStyle={{
-              backgroundImage: 'url(/img/icons/more-options-icons.png)',
-              backgroundPosition: '0 0',
-              fontSize: '0.7em'
-            }}
-          >
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-          </Input>
+              {/* TIME */}
+              <div style={{width: `10em`, marginLeft: `2em`, flex: `none`, display: `inline-block`}}>
+                <Input label='At:'/>
+              </div>
+            </Row>
 
-          {/* <Input
-            label='Voucher code (optional):'
-          /> */}
+            <Row>
+              {/* VOUCHER */}
+              <Input
+                label='Voucher code (optional):'
+              />
+            </Row>
+            
+            <Row
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                height: theme.spacing.inputHeight
+              }}
+            >
+              <div>For ...</div>
+              <div>Btn</div>
+            </Row>
+
+            <OptionsWrapper>
+              <Row>
+                {/* PASSENGERS */}
+                <Input selectOnly
+                  onChange={(val) => {this.props.updateBooking({...this.props.booking, passengers: val})}}
+                  value={this.props.booking.passengers}
+                  dropdownBtn
+                  style={selectStyle}
+                  iconStyle={{
+                    backgroundImage: 'url(/img/icons/seats.png)',
+                    fontSize: '0.7em'
+                  }}
+                >
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                </Input>
+
+                {/* LUGGAGE */}
+                <Input selectOnly
+                  onChange={(val) => {this.props.updateBooking({...this.props.booking, luggage: val})}}
+                  value={this.props.booking.luggage}
+                  dropdownBtn
+                  style={selectStyle}
+                  iconStyle={{
+                    backgroundImage: 'url(/img/icons/luggage.png)',
+                    fontSize: '0.7em'
+                  }}
+                >
+                  <option>0</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                </Input>
+
+                {/* EQUIPMENT */}
+                <Input selectOnly
+                  onChange={(val) => {this.props.updateBooking({...this.props.booking, equipment: val})}}
+                  value={this.props.booking.equipment}
+                  dropdownBtn
+                  style={selectStyle}
+                  iconStyle={{
+                    backgroundImage: 'url(/img/icons/sport_luggage.png)',
+                    fontSize: '0.7em'
+                  }}
+                >
+                  <option>0</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                </Input>
+              </Row>
+
+              <Row>
+                {/* ANIMALS */}
+                <Input selectOnly
+                  onChange={(val) => {this.props.updateBooking({...this.props.booking, animals: val})}}
+                  value={this.props.booking.animals}
+                  dropdownBtn
+                  style={selectStyle}
+                  iconStyle={{
+                    backgroundImage: 'url(/img/icons/animals.png)',
+                    fontSize: '0.7em'
+                  }}
+                >
+                  <option>0</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                </Input>
+
+                {/* CHILDREN */}
+                <Input selectOnly
+                  onChange={(val) => {this.props.updateBooking({...this.props.booking, children: val})}}
+                  value={this.props.booking.children}
+                  dropdownBtn
+                  style={selectStyle}
+                  iconStyle={{
+                    backgroundImage: 'url(/img/icons/children.png)',
+                    fontSize: '0.7em'
+                  }}
+                >
+                  <option>0</option>
+                  <option>1</option>
+                  <option>2</option>
+                </Input>
+              </Row>
+            </OptionsWrapper>
+
+          </Form>
 
         </Page>
       </React.Fragment>
@@ -124,12 +233,15 @@ When.contextType = ResxContext;
 
 
 const mapStateToProps = state => ({
+  booking: state.booking,
   datepickerIsVisible: state.datepickerVisibility
 })
 const mapDispatchToProps = dispatch => ({
-  updateDatepickerVisibility: payload => dispatch(updateDatepickerVisibility(payload))
+  updateDatepickerVisibility: payload => dispatch(updateDatepickerVisibility(payload)),
+  updateBooking: payload => dispatch(updateBooking(payload))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(When)
+
 
 
 
@@ -137,7 +249,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(When)
 const DateWrapper = styled.div`
   width: 100%;
   flex: 1;
-  margin: 0.125em 0em;
   display: inline-block;
   border-radius: ${p => p.theme.spacing.rounding};
 `
@@ -176,3 +287,13 @@ const Label = styled.div`
     display: none;
   }
 `
+
+const Form = styled.div`
+`
+
+const OptionsWrapper = styled.div`
+`
+
+const selectStyle = {
+  width: `calc((100% - 0.25em) / 3.0)`
+}
