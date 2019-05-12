@@ -3,12 +3,12 @@ import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"
 import { ThemeProvider } from 'styled-components'
 import resx, { ResxContext } from './components/resx'
-import styled from 'styled-components'
 
 import WhenPage from './components/pages/When'
 import WhatPage from './components/pages/What'
 import PaymentPage from './components/pages/Payment'
 import AppWrapper from './components/atoms/AppWrapper'
+import PopupHider from './components/atoms/PopupHider'
 import theme from './components/theme'
 import Style from './components/Style'
 
@@ -43,7 +43,9 @@ class App extends Component {
               <Style />
               <PopupHider
                 style={{display: this.props.popupHiderVisibility? 'block' : 'none'}}
-                onClick={() => this.props.hidePopups()}
+                onClick={() => {
+                  this.props.hidePopups() // only calendar
+                }}
               />
               <AppWrapper>
                 <Router>
@@ -70,22 +72,11 @@ class App extends Component {
 
 const mapStateToProps = state => ({
   lang: state.lang,
-  popupHiderVisibility: state.popupHiderVisibility
+  popupHiderVisibility: state.popupHiderVisibility,
+  callbackOfPopupHider: state.callbackOfPopupHider
 })
 const mapDispatchToProps = dispatch => ({
   updateWindowWidthInfo: val => dispatch(updateWindowWidth(val)),
   hidePopups: () => dispatch(updatePopupHiderVisibility(false))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(App)
-
-
-
-const PopupHider = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: rgba(0,0,0,0.25);
-  width: 100vw;
-  height: 100vh;
-  z-index: 100;
-`

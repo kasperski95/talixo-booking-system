@@ -10,7 +10,6 @@ import { ResxContext } from '../resx'
 import { SM } from '../theme'
 import styled from 'styled-components'
 import { updateDatepickerVisibility } from '../../actions'
-import List from '../atoms/List'
 
 class When extends Component {
   
@@ -89,14 +88,16 @@ class When extends Component {
 
           
           <Input
+            selectOnly
+            value={1}
             dropdownBtn
             style={{
               width: '33.333%'
             }}
-
             iconStyle={{
-              background: 'url(/img/icons/more-options-icons.png)',
-              backgroundPosition: '0 0'
+              backgroundImage: 'url(/img/icons/more-options-icons.png)',
+              backgroundPosition: '0 0',
+              fontSize: '0.7em'
             }}
           >
             <option>1</option>

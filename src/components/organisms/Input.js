@@ -5,29 +5,21 @@ import ArrowDown from '../atoms/ArrowDown'
 import If from '../atoms/If'
 import Triangle from '../atoms/Triangle'
 import List from '../atoms/List'
-import {
-  updatePopupHiderVisibility
-} from '../../actions'
-
+import PopupHider from '../atoms/PopupHider'
+import theme from '../theme'
 
 class Input extends Component {
   state = {
-    expanded: false
-  }
-
-  handleExpansion = () => {
-    //this.props.updatePopupHiderVisibility(true)
-    this.setState({...this.state, expanded: true})
+    extended: false
   }
 
   render() {
-    const tooltip = this.props.tooltip? true : false;
     return (
-      <Wrapper style={this.props.style} respectTooltipBtn={tooltip}>
-        <If condition={this.props.label && !this.props.icon}>
+      <Wrapper style={this.props.style} respectTooltipBtn={this.props.tooltip}>
+        <If condition={this.props.label && !this.props.iconStyle}>
           <Label>{this.props.label}</Label>
         </If>
-        <If condition={tooltip}>
+        <If condition={this.props.tooltip}>
           <TooltipBtn>?</TooltipBtn>
           <Tooltip className='tooltip'>
             <React.Fragment>
@@ -36,32 +28,55 @@ class Input extends Component {
             </React.Fragment>
           </Tooltip>
         </If>
-        <InputWrapper>
-          <If condition={this.props.label && !this.props.icon}>
-            <InlineLabel>{this.props.label}</InlineLabel>
+        <InputWrapper
+          style={{
+            boxShadow: this.state.expanded? theme.shadows[0] : 'none',
+            cursor: this.props.selectOnly? 'pointer' : 'default'
+          }}
+          onClick={() => {
+            if(this.props.selectOnly) this.setState({...this.state, expanded: true})
+          }}
+        >
+          <If condition={this.props.iconStyle}>
+            <IconWrapper>
+              <Icon style={this.props.iconStyle} />
+            </IconWrapper>
           </If>
-          <If condition={this.props.icon}>
-            <Icon />
+          <If condition={this.props.label && !this.props.iconStyle}>
+            <InlineLabel>{this.props.label}</InlineLabel>
           </If>
           <If condition={!this.props.noTextInput}>
             <TextInput
-              roundLeft={!this.props.icon && !this.props.label}
+              className={this.props.selectOnly? 'no-outline' : ''}
+              style={{cursor: this.props.selectOnly? 'pointer' : 'default'}}
+              readOnly={this.props.selectOnly}
+              roundLeft={!this.props.iconStyle && !this.props.label}
               onChange={this.props.onChange}
               placeholder={this.props.placeholder} />
           </If>
           <If condition={this.props.dropdownBtn}>
             <Icon leftSeparator
-              onClick={() => {this.handleExpansion()}}
-              style={{opacity: this.props.onDropdownClick? 1 : 0.5}}
+              onClick={() => {
+                if (this.props.children)
+                  this.setState({...this.state, expanded: true})
+              }}
+              style={{
+                opacity: this.props.selectOnly? 1 : 0.5              
+              }}
             >
-              <ArrowDown style={{fontSize: `2em`, top: `50%`, left: `50%`, transform: `translate(-50%, -50%)`}} />
+              <ArrowDown style={{fontSize: `2em`, top: `50%`, left: `50%`, transform: `translate(-50%, -50%)`}}
+              />
             </Icon>
           </If> 
         </InputWrapper>
         <If condition={this.props.children}>
+          <PopupHider
+            onClick={() => {this.setState({...this.state, expanded: false})}}
+            style={{display: this.state.expanded? 'block' : 'none'}}
+          />
           <List
             style={{
-              display: (this.state.expanded)? 'block' : 'none',
+              display: this.state.expanded? 'block' : 'none',
               position: 'absolute',
               zIndex: 1000,
               right: 0,
@@ -69,7 +84,13 @@ class Input extends Component {
               transform: 'translateY(calc(100% + 0.125em))'
             }}
           >
-            {this.props.children}
+            {(this.props.children || []).map(child => {
+              const className = child.props.children == this.props.value? 'active' : ''
+              return React.cloneElement(child, {
+                key: child.props.children,
+                className: className
+              })
+            })}
           </List>
         </If>
       </Wrapper>
@@ -80,12 +101,8 @@ class Input extends Component {
 
 
 const mapStateToProps = state => ({
-  datepickerIsVisible: state.datepickerVisibility
 })
 const mapDispatchToProps = dispatch => ({
-  updatePopupHiderVisibility: val => {
-    dispatch(updatePopupHiderVisibility(val))
-  }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Input)
 
@@ -128,6 +145,7 @@ const InlineLabel = styled.div`
   display: none;
   align-items: center;
   padding-left: 0.6em;
+  padding-right: 0.25em;
   white-space: nowrap;
   font-weight: 300;
 
@@ -136,20 +154,33 @@ const InlineLabel = styled.div`
   }
 `
 
+const IconWrapper = styled.div`
+  width: ${p => p.theme.spacing.inputHeight};
+  height: ${p => p.theme.spacing.inputHeight};
+  background-color: ${p => p.theme.colors.base.bg.main};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: none;
+
+`
+
 const Icon = styled.div`
   width: ${p => p.theme.spacing.inputHeight};
   height: ${p => p.theme.spacing.inputHeight};
   display: inline-block;
   position: relative;
   border-left: ${p => p.leftSeparator? `2px solid ${p.theme.colors.base.bg.dark}` : 'none'};
+  background-size: cover;
   flex: none;
+  background-repeat: no-repeat;
 `
 
 const TextInput = styled.input`
   box-sizing: border-box;
   font-size: 1.25em;
   margin: 0;
-  padding: 0em 0.5em;
+  padding: 0em 0.5em 0em 0.25em;
   display: inline-block;
   width: 100%;
   height: 100%;

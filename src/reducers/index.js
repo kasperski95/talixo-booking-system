@@ -5,7 +5,8 @@ import {
   UPDATE_WINDOW_WIDTH,
   UPDATE_BOOKING,
   UPDATE_DATEPICKER_VISIBILITY,
-  UPDATE_POPUP_HIDER_VISIBILITY
+  UPDATE_POPUP_HIDER_VISIBILITY,
+  SET_CALLBACK_OF_POPUP_HIDER
  } from '../constants/action-types'
 
 
@@ -58,6 +59,10 @@ export default function rootReducer(state=initialState, action) {
           popupHiderVisibility: false,
           datepickerVisibility: false,
         }
+      break
+
+    case SET_CALLBACK_OF_POPUP_HIDER:
+      state = {...state, callbackOfPopupHider: action.payload}
       break
 
     default: break

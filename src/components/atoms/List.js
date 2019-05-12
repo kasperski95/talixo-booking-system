@@ -44,7 +44,7 @@ export default function(props) {
 
 
 const List = styled.div`
-  width: 100%
+  width: 100%;
   
   & > option {
     padding: 0em;
@@ -59,6 +59,10 @@ const List = styled.div`
   & > option:hover {
     background-color: ${p => p.theme.colors.base.bg.main};
     color: ${p => p.theme.colors.accent.main};
+    font-weight: 600;
+  }
+
+  & > option.active {
     font-weight: 600;
   }
 `

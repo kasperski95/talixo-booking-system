@@ -15,6 +15,10 @@ const Style = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
     font-weight: 300;
   }
+
+  .no-outline:focus {
+    outline: none;
+  }
 `
 
 export default Style;
