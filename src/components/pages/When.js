@@ -166,6 +166,7 @@ class When extends Component {
                     <Input selectOnly
                       onChange={(val) => {this.props.updateBooking({...this.props.booking, passengers: val})}}
                       value={this.props.booking.passengers}
+                      iconTooltip={"Passengers"}
                       dropdownBtn
                       style={selectStyle}
                       iconStyle={{
@@ -187,6 +188,7 @@ class When extends Component {
                     <Input selectOnly
                       onChange={(val) => {this.props.updateBooking({...this.props.booking, luggage: val})}}
                       value={this.props.booking.luggage}
+                      iconTooltip='Max. 20kg each. 1 piece of hand luggage is included per passenger.'
                       dropdownBtn
                       style={selectStyle}
                       iconStyle={{
@@ -209,6 +211,7 @@ class When extends Component {
                     <Input selectOnly
                       onChange={(val) => {this.props.updateBooking({...this.props.booking, equipment: val})}}
                       value={this.props.booking.equipment}
+                      iconTooltip='Golf equipment, skis, snowboard...'
                       dropdownBtn
                       style={selectStyle}
                       iconStyle={{
@@ -228,6 +231,7 @@ class When extends Component {
                     <Input selectOnly
                       onChange={(val) => {this.props.updateBooking({...this.props.booking, animals: val})}}
                       value={this.props.booking.animals}
+                      iconTooltip='Small animals'
                       dropdownBtn
                       style={selectStyle}
                       iconStyle={{
@@ -246,6 +250,7 @@ class When extends Component {
                     <Input selectOnly
                       onChange={(val) => {this.props.updateBooking({...this.props.booking, children: val})}}
                       value={this.props.booking.children}
+                      iconTooltip='Children seats'
                       dropdownBtn
                       style={selectStyle}
                       iconStyle={{
@@ -280,6 +285,7 @@ class When extends Component {
                           })
                         }}
                         value={this.props.booking.perHourBooking + 'h'}
+                        iconTooltip='Per-hour booking duration'
                         style={{
                           width: '10em',
                           marginLeft: theme.spacing.gutters[0],

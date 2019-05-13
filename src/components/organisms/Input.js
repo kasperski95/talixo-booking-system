@@ -10,7 +10,8 @@ import theme from '../theme'
 
 class Input extends Component {
   state = {
-    extended: false
+    extended: false,
+    iconTooltipVisible: false
   }
 
   render() {
@@ -22,10 +23,17 @@ class Input extends Component {
         <If condition={this.props.tooltip}>
           <TooltipBtn>?</TooltipBtn>
           <Tooltip className='tooltip'>
-            <React.Fragment>
-              <Triangle color='black' size='12px' style={{position: 'absolute', top: '-12px'}} />
-              {this.props.tooltip}
-            </React.Fragment>
+            <Triangle color='black' size='12px' style={{position: 'absolute', top: '-12px'}} />
+            {this.props.tooltip}
+          </Tooltip>
+          
+        </If>
+        <If condition={this.props.iconTooltip}>
+          <Tooltip top
+            style={{display: this.state.iconTooltipVisible? 'block' : 'none'}}
+          >
+            {/* <Triangle down color='black' size='12px' style={{position: 'absolute', bottom: '-12px'}} /> */}
+            {this.props.iconTooltip}
           </Tooltip>
         </If>
         <InputWrapper
@@ -38,7 +46,14 @@ class Input extends Component {
           }}
         >
           <If condition={this.props.iconStyle}>
-            <IconWrapper>
+            <IconWrapper
+              onMouseOver={() => {
+                this.setState({...this.state, iconTooltipVisible: true})
+              }}
+              onMouseOut={() => {
+                this.setState({...this.state, iconTooltipVisible: false})
+              }}
+            >
               <Icon style={this.props.iconStyle} />
             </IconWrapper>
           </If>
@@ -59,7 +74,8 @@ class Input extends Component {
                   this.props.onChange()
               }}  
               placeholder={this.props.placeholder}
-              value={this.props.selectOnly? this.props.value : undefined}
+              value={this.props.value}
+              
             />
           </If>
           <If condition={this.props.dropdownBtn}>
@@ -173,6 +189,7 @@ const InlineLabel = styled.div`
   }
 `
 
+
 const IconWrapper = styled.div`
   width: ${p => p.theme.spacing.inputHeight};
   height: ${p => p.theme.spacing.inputHeight};
@@ -241,7 +258,7 @@ const Tooltip = styled.div`
   display: none;
   font-size: 0.875em;
   position: absolute;
-  bottom: 0em;
+  ${p => p.top? 'top: 0' : 'bottom: 0'};
   width: 100%;
   box-sizing: border-box;
   padding: 0.5em 0.75em;
@@ -249,6 +266,6 @@ const Tooltip = styled.div`
   border-radius: ${p => p.theme.spacing.rounding};
   color: rgba(255,255,255,0.75);
   z-index: 100;
-  transform: translateY(calc(100% + 0.125em));
+  transform: translateY(calc(${p => p.top? '-100% - 0.125em' : '100% + 0.125em'}));
   box-shadow: ${p => p.theme.shadows[0]};
 `

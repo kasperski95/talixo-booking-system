@@ -25,7 +25,7 @@ const initialState = {
     children: 0,
     perHourBooking: 0
   },
-  optionsExpanded: false,
+  optionsExpanded: true,
   datepickerVisibility: false,
   popupHiderVisibility: false
 }

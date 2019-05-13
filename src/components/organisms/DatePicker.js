@@ -144,6 +144,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(DatePicker)
 
 
 const Wrapper = styled.div`
+  color: ${p => p.theme.colors.base.txt.main};
   background-color: ${p => p.theme.colors.base.bg.main};
   position: absolute;
   right: 0;
