@@ -66,92 +66,99 @@ class When extends Component {
 
 
           <Form>
-            <Row>
-              {/* FROM */}
-              <Input
-                label='Pick up:'
-                placeholder='e.g. Torstraße 124, Berlin'
-                tooltip='Please provide a street address, airport name or hotel name.'
-                dropdownBtn
-              />
-            </Row>
-
-            <Row>
-              {/* TO */}
-              <Input
-                label='Destination:'
-                placeholder='e.g. Tegel Airport'
-                tooltip='Please provide a street address, airport name or hotel name.'
-                dropdownBtn
-              />
-            </Row>
-            
-            <Row style={{display: `flex`}}>
-              {/* DATE */}
-              <DateWrapper>
-                <Label>On:</Label>
-                <DateInput >
-                  <DateButtons />
-                  <DatePickerWrapper>
-                    <DatePickerBtn
-                      onClick={() => this.props.updateDatepickerVisibility(!this.props.datepickerIsVisible)}
-                    />
-                    <DatePicker 
-                      style={{
-                        display: this.props.datepickerIsVisible? 'block' : 'none'
-                      }}
-                    />
-                  </DatePickerWrapper>
-                </DateInput>
-              </DateWrapper>
-
-              {/* TIME */}
-              <div style={{width: `10em`, marginLeft: `2em`, flex: `none`, display: `inline-block`}}>
-                <Input label='At:'/>
-              </div>
-            </Row>
-
-            <Row>
-              {/* VOUCHER */}
-              <Input
-                label='Voucher code (optional):'
-              />
-            </Row>
-            
-
-            <Row
+            <div
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                height: theme.spacing.inputHeight
-              }}
-            >
-              <div style={{width: '100%'}}>
-                For ...
-              </div>
-              <DropDownBtn animate
-                label='more options'
-                onClick={() => {this.props.updateOptionsExpansion(!this.props.optionsAreVisible)}}
-                expanded={this.props.optionsAreVisible}
-                style={{
-                  flex: 'none'
-                }}
-              />
-            </Row>
+                backgroundColor: theme.colors.primary.bg.main,
+                position: 'relative',
+                zIndex: 50
+              }}>
+              <Row>
+                {/* FROM */}
+                <Input
+                  label='Pick up:'
+                  placeholder='e.g. Torstraße 124, Berlin'
+                  tooltip='Please provide a street address, airport name or hotel name.'
+                  dropdownBtn
+                />
+              </Row>
 
+              <Row>
+                {/* TO */}
+                <Input
+                  label='Destination:'
+                  placeholder='e.g. Tegel Airport'
+                  tooltip='Please provide a street address, airport name or hotel name.'
+                  dropdownBtn
+                />
+              </Row>
+              
+              <Row style={{display: `flex`}}>
+                {/* DATE */}
+                <DateWrapper>
+                  <Label>On:</Label>
+                  <DateInput >
+                    <DateButtons />
+                    <DatePickerWrapper>
+                      <DatePickerBtn
+                        onClick={() => this.props.updateDatepickerVisibility(!this.props.datepickerIsVisible)}
+                      />
+                      <DatePicker 
+                        style={{
+                          display: this.props.datepickerIsVisible? 'block' : 'none'
+                        }}
+                      />
+                    </DatePickerWrapper>
+                  </DateInput>
+                </DateWrapper>
+
+                {/* TIME */}
+                <div style={{width: `10em`, marginLeft: `2em`, flex: `none`, display: `inline-block`}}>
+                  <Input label='At:'/>
+                </div>
+              </Row>
+
+              <Row>
+                {/* VOUCHER */}
+                <Input
+                  label='Voucher code (optional):'
+                />
+              </Row>
+              
+
+              <Row
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: theme.spacing.inputHeight
+                }}
+              >
+                <div style={{width: '100%'}}>
+                  For ...
+                </div>
+                <DropDownBtn animate
+                  label='more options'
+                  onClick={() => {this.props.updateOptionsExpansion(!this.props.optionsAreVisible)}}
+                  expanded={this.props.optionsAreVisible}
+                  style={{
+                    flex: 'none'
+                  }}
+                />
+              </Row>
+            </div>
             
           <Spring native 
-            to={{expansion: this.props.optionsAreVisible? 0 : 0}}
+            to={{expansion: this.props.optionsAreVisible? 0 : 1}}
           >{i => { // i(nterpolated props)
             return (
               <div
                 style={{
+                  // overflow: 'hidden'
                 }}
               >
                 <OptionsWrapper
                   id="options-wrapper"
                   style={{
-                    marginTop: i.expansion.interpolate(val => `-${val * optionsWrapperHeight}px`)
+                    marginTop: i.expansion.interpolate(val => `-${val * 11.25}em`)
                   }}
                 >
                   <Row style={{marginTop: 0}}>

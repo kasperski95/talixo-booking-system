@@ -31,7 +31,7 @@ class Input extends Component {
         <InputWrapper
           style={{
             boxShadow: this.state.expanded? theme.shadows[0] : 'none',
-            cursor: this.props.selectOnly? 'pointer' : 'default'
+            cursor: this.props.selectOnly? 'pointer' : 'auto'
           }}
           onClick={() => {
             if(this.props.selectOnly) this.setState({...this.state, expanded: true})
@@ -49,7 +49,7 @@ class Input extends Component {
             <TextInput
               className={this.props.selectOnly? 'no-outline' : ''}
               style={{
-                cursor: this.props.selectOnly? 'pointer' : 'default',
+                cursor: this.props.selectOnly? 'pointer' : 'auto',
                 textAlign: this.props.selectOnly? 'center' : 'left'
               }}
               readOnly={this.props.selectOnly}
