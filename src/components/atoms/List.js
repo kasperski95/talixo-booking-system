@@ -45,7 +45,8 @@ export default function(props) {
 
 const List = styled.div`
   width: 100%;
-  
+  color: ${p => p.theme.colors.base.txt.main};
+
   & > option {
     padding: 0em;
     height: ${p => p.theme.spacing.inputHeight};

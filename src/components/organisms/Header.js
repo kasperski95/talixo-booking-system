@@ -17,7 +17,8 @@ class Header extends Component {
             <Logo />
             <Right>
               <DropDownBtn
-                style={{height: `100%`}}
+                onMouseOver={(e) => {this.props.updateDdmVisibility(true);}}
+                onMouseLeave={(e) => {this.props.updateDdmVisibility(false);}}
                 label={<span style={{fontSize: `0.85em`}}>{this.props.lang.toUpperCase()}</span>}
                 animate
                 expanded={this.props.dropdownMenuVisible}
@@ -86,6 +87,7 @@ const HeaderContent = styled.div`
 
 const DropDownMenuItem = styled.li`
   cursor: pointer;
+  font-weight: 400;
   &:hover {
     color: ${props => props.theme.colors.accent.light};
   }

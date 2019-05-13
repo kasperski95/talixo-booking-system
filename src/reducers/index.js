@@ -6,7 +6,8 @@ import {
   UPDATE_BOOKING,
   UPDATE_DATEPICKER_VISIBILITY,
   UPDATE_POPUP_HIDER_VISIBILITY,
-  SET_CALLBACK_OF_POPUP_HIDER
+  SET_CALLBACK_OF_POPUP_HIDER,
+  UPDATE_OPTIONS_EXPANSION
  } from '../constants/action-types'
 
 
@@ -21,8 +22,10 @@ const initialState = {
     luggage: 0,
     equipment: 0,
     animals: 0,
-    children: 0
+    children: 0,
+    perHourBooking: 0
   },
+  optionsExpanded: false,
   datepickerVisibility: false,
   popupHiderVisibility: false
 }
@@ -68,6 +71,10 @@ export default function rootReducer(state=initialState, action) {
 
     case SET_CALLBACK_OF_POPUP_HIDER:
       state = {...state, callbackOfPopupHider: action.payload}
+      break
+
+    case UPDATE_OPTIONS_EXPANSION:
+      state = {...state, optionsExpanded: action.payload}
       break
 
     default: break

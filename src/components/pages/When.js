@@ -1,20 +1,25 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Spring, animated, interpolate } from 'react-spring/renderprops'
 import Header from '../organisms/Header'
 import Input from '../organisms/Input'
 import DatePicker from '../organisms/DatePicker'
 import DateButtons from '../organisms/DateButtons'
 import StylishOrderedList from '../molecules/StylishOrderedList'
 import Page from '../molecules/Page'
+import DropDownBtn from '../molecules/DropDownBtn'
 import { ResxContext } from '../resx'
 import { SM } from '../theme'
 import styled from 'styled-components'
 import { 
   updateDatepickerVisibility,
-  updateBooking
+  updateBooking,
+  updateOptionsExpansion
 } from '../../actions'
 import Row from '../atoms/Row'
 import theme from '../theme'
+import Checkbox from '../atoms/Checkbox'
+import moment from 'moment'
 
 
 class When extends Component {
@@ -22,6 +27,12 @@ class When extends Component {
   render() {
     const data = this.context
     document.title = `[1/3] ${data.title} - ${data.whenAndWhen}`
+
+    const optionsWrapperElement = document.getElementById('options-wrapper');
+    let optionsWrapperHeight = 0;
+    if (optionsWrapperElement) {
+      optionsWrapperHeight = parseInt(getComputedStyle(optionsWrapperElement).getPropertyValue('height'))
+    }
 
     return (
       <React.Fragment>
@@ -46,11 +57,9 @@ class When extends Component {
             }
             else={
               <StylishOrderedList style={{textAlign: `center`}}>
-                <React.Fragment>
-                  <li className='active'>{data.whenAndWhen}</li>
-                  <li>{data.chooseCar}</li>
-                  <li>{data.detailsAndPayment}</li>
-                </React.Fragment>
+                <li className='active'>{data.whenAndWhen}</li>
+                <li>{data.chooseCar}</li>
+                <li>{data.detailsAndPayment}</li>
               </StylishOrderedList>
             }
           />
@@ -109,6 +118,7 @@ class When extends Component {
               />
             </Row>
             
+
             <Row
               style={{
                 display: 'flex',
@@ -116,110 +126,176 @@ class When extends Component {
                 height: theme.spacing.inputHeight
               }}
             >
-              <div>For ...</div>
-              <div>Btn</div>
+              <div style={{width: '100%'}}>
+                For ...
+              </div>
+              <DropDownBtn animate
+                label='more options'
+                onClick={() => {this.props.updateOptionsExpansion(!this.props.optionsAreVisible)}}
+                expanded={this.props.optionsAreVisible}
+                style={{
+                  flex: 'none'
+                }}
+              />
             </Row>
 
-            <OptionsWrapper>
-              <Row>
-                {/* PASSENGERS */}
-                <Input selectOnly
-                  onChange={(val) => {this.props.updateBooking({...this.props.booking, passengers: val})}}
-                  value={this.props.booking.passengers}
-                  dropdownBtn
-                  style={selectStyle}
-                  iconStyle={{
-                    backgroundImage: 'url(/img/icons/seats.png)',
-                    fontSize: '0.7em'
+            
+          <Spring native 
+            to={{expansion: this.props.optionsAreVisible? 0 : 0}}
+          >{i => { // i(nterpolated props)
+            return (
+              <div
+                style={{
+                }}
+              >
+                <OptionsWrapper
+                  id="options-wrapper"
+                  style={{
+                    marginTop: i.expansion.interpolate(val => `-${val * optionsWrapperHeight}px`)
                   }}
                 >
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                  <option>6</option>
-                  <option>7</option>
-                  <option>8</option>
-                </Input>
+                  <Row style={{marginTop: 0}}>
+                    {/* PASSENGERS */}
+                    <Input selectOnly
+                      onChange={(val) => {this.props.updateBooking({...this.props.booking, passengers: val})}}
+                      value={this.props.booking.passengers}
+                      dropdownBtn
+                      style={selectStyle}
+                      iconStyle={{
+                        backgroundImage: 'url(/img/icons/seats.png)',
+                        fontSize: '0.7em'
+                      }}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                    </Input>
 
-                {/* LUGGAGE */}
-                <Input selectOnly
-                  onChange={(val) => {this.props.updateBooking({...this.props.booking, luggage: val})}}
-                  value={this.props.booking.luggage}
-                  dropdownBtn
-                  style={selectStyle}
-                  iconStyle={{
-                    backgroundImage: 'url(/img/icons/luggage.png)',
-                    fontSize: '0.7em'
-                  }}
-                >
-                  <option>0</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                  <option>6</option>
-                  <option>7</option>
-                  <option>8</option>
-                </Input>
+                    {/* LUGGAGE */}
+                    <Input selectOnly
+                      onChange={(val) => {this.props.updateBooking({...this.props.booking, luggage: val})}}
+                      value={this.props.booking.luggage}
+                      dropdownBtn
+                      style={selectStyle}
+                      iconStyle={{
+                        backgroundImage: 'url(/img/icons/luggage.png)',
+                        fontSize: '0.7em'
+                      }}
+                    >
+                      <option>0</option>
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                    </Input>
 
-                {/* EQUIPMENT */}
-                <Input selectOnly
-                  onChange={(val) => {this.props.updateBooking({...this.props.booking, equipment: val})}}
-                  value={this.props.booking.equipment}
-                  dropdownBtn
-                  style={selectStyle}
-                  iconStyle={{
-                    backgroundImage: 'url(/img/icons/sport_luggage.png)',
-                    fontSize: '0.7em'
-                  }}
-                >
-                  <option>0</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                </Input>
-              </Row>
+                    {/* EQUIPMENT */}
+                    <Input selectOnly
+                      onChange={(val) => {this.props.updateBooking({...this.props.booking, equipment: val})}}
+                      value={this.props.booking.equipment}
+                      dropdownBtn
+                      style={selectStyle}
+                      iconStyle={{
+                        backgroundImage: 'url(/img/icons/sport_luggage.png)',
+                        fontSize: '0.7em'
+                      }}
+                    >
+                      <option>0</option>
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </Input>
+                  </Row>
 
-              <Row>
-                {/* ANIMALS */}
-                <Input selectOnly
-                  onChange={(val) => {this.props.updateBooking({...this.props.booking, animals: val})}}
-                  value={this.props.booking.animals}
-                  dropdownBtn
-                  style={selectStyle}
-                  iconStyle={{
-                    backgroundImage: 'url(/img/icons/animals.png)',
-                    fontSize: '0.7em'
-                  }}
-                >
-                  <option>0</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                </Input>
+                  <Row style={{marginBottom: 0}}>
+                    {/* ANIMALS */}
+                    <Input selectOnly
+                      onChange={(val) => {this.props.updateBooking({...this.props.booking, animals: val})}}
+                      value={this.props.booking.animals}
+                      dropdownBtn
+                      style={selectStyle}
+                      iconStyle={{
+                        backgroundImage: 'url(/img/icons/animals.png)',
+                        fontSize: '0.7em'
+                      }}
+                    >
+                      <option>0</option>
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                    </Input>
 
-                {/* CHILDREN */}
-                <Input selectOnly
-                  onChange={(val) => {this.props.updateBooking({...this.props.booking, children: val})}}
-                  value={this.props.booking.children}
-                  dropdownBtn
-                  style={selectStyle}
-                  iconStyle={{
-                    backgroundImage: 'url(/img/icons/children.png)',
-                    fontSize: '0.7em'
-                  }}
-                >
-                  <option>0</option>
-                  <option>1</option>
-                  <option>2</option>
-                </Input>
-              </Row>
-            </OptionsWrapper>
+                    {/* CHILDREN */}
+                    <Input selectOnly
+                      onChange={(val) => {this.props.updateBooking({...this.props.booking, children: val})}}
+                      value={this.props.booking.children}
+                      dropdownBtn
+                      style={selectStyle}
+                      iconStyle={{
+                        backgroundImage: 'url(/img/icons/children.png)',
+                        fontSize: '0.7em'
+                      }}
+                    >
+                      <option>0</option>
+                      <option>1</option>
+                      <option>2</option>
+                    </Input>
+                  </Row>
 
+                  <Row style={{margin: '1em 0em', height: theme.spacing.inputHeight}}>
+                    <Checkbox 
+                      onClick={() => {
+                        let value = (this.props.booking.perHourBooking > 0)? 0 : 1
+                        this.props.updateBooking({
+                          ...this.props.booking, perHourBooking: value
+                        })
+                      }}
+                      active={(this.props.booking.perHourBooking > 0)? true : false}
+                    >
+                      Per-hour booking
+                    </Checkbox>
+                    <PerHourWrapper style={{opacity: this.props.booking.perHourBooking? 1 : 0}}>
+                      for
+                      <Input selectOnly
+                        onChange={(val) => {
+                          this.props.updateBooking({
+                            ...this.props.booking, perHourBooking: parseInt(val)
+                          })
+                        }}
+                        value={this.props.booking.perHourBooking + 'h'}
+                        style={{
+                          width: '10em',
+                          marginLeft: theme.spacing.gutters[0],
+                          marginRight: theme.spacing.gutters[0],
+                          color: 'red'
+                        }}
+                        iconStyle={{
+                          backgroundImage: 'url(/img/icons/time.png)',
+                          fontSize: '0.7em'
+                        }}
+                        dropdownBtn
+                      >{
+                        (new Array(24)).fill(0).map((val, key) => {
+                          return <option key={`perHourBooking-${key+1}`} >{`${key+1}h`}</option>
+                        })
+                      }</Input>
+                      till {new moment(this.props.booking.hour, 'HH:mm').add(this.props.booking.perHourBooking, 'hours').format('HH:mm')}
+                    </PerHourWrapper>
+                  </Row>
+                </OptionsWrapper>
+              </div>
+            )
+          }}</Spring>
           </Form>
 
         </Page>
@@ -234,11 +310,13 @@ When.contextType = ResxContext;
 
 const mapStateToProps = state => ({
   booking: state.booking,
-  datepickerIsVisible: state.datepickerVisibility
+  datepickerIsVisible: state.datepickerVisibility,
+  optionsAreVisible: state.optionsExpanded
 })
 const mapDispatchToProps = dispatch => ({
   updateDatepickerVisibility: payload => dispatch(updateDatepickerVisibility(payload)),
-  updateBooking: payload => dispatch(updateBooking(payload))
+  updateBooking: payload => dispatch(updateBooking(payload)),
+  updateOptionsExpansion: payload => dispatch(updateOptionsExpansion(payload))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(When)
 
@@ -289,11 +367,23 @@ const Label = styled.div`
 `
 
 const Form = styled.div`
+  margin-top: ${p => p.theme.spacing.gutters[1]};
 `
 
-const OptionsWrapper = styled.div`
+const OptionsWrapper = styled(animated.div)`
 `
 
 const selectStyle = {
   width: `calc((100% - 0.25em) / 3.0)`
 }
+
+const PerHourWrapper = styled.div`
+  width: 100%;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  white-space: nowrap;
+  padding-left: 0.15em;
+  box-sizing: border-box;
+  transition: opacity 0.1s;
+`

@@ -23,7 +23,7 @@ class App extends Component {
     super();
 
     window.addEventListener('resize', () => {
-      this.props.updateWindowWidthInfo(document.documentElement.clientWidth);
+      this.props.updateWindowWidthInfo(window.innerWidth);
     }, true)
   }
 

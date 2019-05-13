@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import moment from 'moment'
 import { updateBooking } from '../../actions'
 
+
+
 class DateButtons extends Component {
   getDayComponent(props) {
     const date = moment(props.date, 'YYYY-MM-DD')
@@ -85,6 +87,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(DateButtons)
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+  color: ${p => p.theme.colors.primary.bg.main};
 ` 
 
 const DayWrapper = styled.div`
@@ -117,7 +120,7 @@ const DateLabel = styled.div`
   align-items: flex-end;
   font-size: 0.8em;
   font-weight: bold;
-  color: ${p => p.active? p.theme.colors.accent.main : p.theme.colors.primary.bg.main};
+  color: ${p => p.active? p.theme.colors.accent.main : 'inherit'};
   width: 100%;
   height: 50%;
 `

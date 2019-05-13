@@ -55,11 +55,11 @@ class Input extends Component {
               readOnly={this.props.selectOnly}
               roundLeft={!this.props.iconStyle && !this.props.label}
               onChange={() => {
-                if (!this.props.selectOnly)
+                if (!this.props.selectOnly && this.props.onChange)
                   this.props.onChange()
               }}  
               placeholder={this.props.placeholder}
-              value={this.props.selectOnly? this.props.value : ''}
+              value={this.props.selectOnly? this.props.value : undefined}
             />
           </If>
           <If condition={this.props.dropdownBtn}>
@@ -105,7 +105,8 @@ class Input extends Component {
                 key: child.props.children,
                 className: className,
                 onClick: () => {
-                  this.props.onChange(child.props.children)
+                  if (this.props.onChange)
+                    this.props.onChange(child.props.children)
                   this.setState({expanded: false})
                 }
               })
@@ -209,7 +210,7 @@ const TextInput = styled.input`
     opacity: 0.5;
   }
 `
-
+ 
 const TooltipBtn = styled.div`
   width: 1.25em;
   height: 1.25em;
@@ -221,7 +222,7 @@ const TooltipBtn = styled.div`
   border-radius: 50%;
   font-weight: 600;
   position: absolute;
-  top: 50%;
+  top: calc(50% + 0.55em);
   right: -${tooltipBtnInset};
   transform: translateY(-50%);
   z-index: 10;
@@ -229,6 +230,10 @@ const TooltipBtn = styled.div`
 
   &:hover ~ .tooltip {
     display: block;
+  }
+
+  @media (min-width: ${[p => p.theme.breakpoints.md]}) {  
+    top: 50%;
   }
 `
 

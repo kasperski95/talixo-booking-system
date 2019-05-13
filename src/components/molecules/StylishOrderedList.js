@@ -32,6 +32,10 @@ export default styled.ol`
     transform: translateY(0.1em);
   }
 
+  li:last-of-type {
+    margin-right: 0
+  }
+
   li:last-of-type::before {
     margin-right: ${p => p.sm? '0em' : p.theme.spacing.gutters[0]};
   }
