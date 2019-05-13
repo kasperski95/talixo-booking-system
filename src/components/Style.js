@@ -14,6 +14,7 @@ const Style = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 300;
+    min-width: 432px;
   }
 
   .no-outline:focus {

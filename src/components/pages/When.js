@@ -19,6 +19,7 @@ import {
 import Row from '../atoms/Row'
 import theme from '../theme'
 import Checkbox from '../atoms/Checkbox'
+import Submit from '../atoms/Submit'
 import moment from 'moment'
 
 
@@ -28,11 +29,6 @@ class When extends Component {
     const data = this.context
     document.title = `[1/3] ${data.title} - ${data.whenAndWhen}`
 
-    const optionsWrapperElement = document.getElementById('options-wrapper');
-    let optionsWrapperHeight = 0;
-    if (optionsWrapperElement) {
-      optionsWrapperHeight = parseInt(getComputedStyle(optionsWrapperElement).getPropertyValue('height'))
-    }
 
     return (
       <React.Fragment>
@@ -66,12 +62,7 @@ class When extends Component {
 
 
           <Form>
-            <div
-              style={{
-                backgroundColor: theme.colors.primary.bg.main,
-                position: 'relative',
-                zIndex: 50
-              }}>
+            <Overlapper>
               <Row>
                 {/* FROM */}
                 <Input
@@ -102,11 +93,7 @@ class When extends Component {
                       <DatePickerBtn
                         onClick={() => this.props.updateDatepickerVisibility(!this.props.datepickerIsVisible)}
                       />
-                      <DatePicker 
-                        style={{
-                          display: this.props.datepickerIsVisible? 'block' : 'none'
-                        }}
-                      />
+                      <DatePicker />
                     </DatePickerWrapper>
                   </DateInput>
                 </DateWrapper>
@@ -144,171 +131,172 @@ class When extends Component {
                   }}
                 />
               </Row>
-            </div>
+            </Overlapper>
             
-          <Spring native 
-            to={{expansion: this.props.optionsAreVisible? 0 : 1}}
-          >{i => { // i(nterpolated props)
-            return (
-              <div
-                style={{
-                  // overflow: 'hidden'
-                }}
-              >
-                <OptionsWrapper
-                  id="options-wrapper"
+            <Spring native 
+              to={{expansion: this.props.optionsAreVisible? 0 : 1}}
+            >{i => { // i(nterpolated props)
+              return (
+                <div
                   style={{
-                    marginTop: i.expansion.interpolate(val => `-${val * 11.25}em`)
+                    // overflow: 'hidden'
                   }}
                 >
-                  <Row style={{marginTop: 0}}>
-                    {/* PASSENGERS */}
-                    <Input selectOnly
-                      onChange={(val) => {this.props.updateBooking({...this.props.booking, passengers: val})}}
-                      value={this.props.booking.passengers}
-                      iconTooltip={"Passengers"}
-                      dropdownBtn
-                      style={selectStyle}
-                      iconStyle={{
-                        backgroundImage: 'url(/img/icons/seats.png)',
-                        fontSize: '0.7em'
-                      }}
-                    >
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                      <option>6</option>
-                      <option>7</option>
-                      <option>8</option>
-                    </Input>
-
-                    {/* LUGGAGE */}
-                    <Input selectOnly
-                      onChange={(val) => {this.props.updateBooking({...this.props.booking, luggage: val})}}
-                      value={this.props.booking.luggage}
-                      iconTooltip='Max. 20kg each. 1 piece of hand luggage is included per passenger.'
-                      dropdownBtn
-                      style={selectStyle}
-                      iconStyle={{
-                        backgroundImage: 'url(/img/icons/luggage.png)',
-                        fontSize: '0.7em'
-                      }}
-                    >
-                      <option>0</option>
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                      <option>6</option>
-                      <option>7</option>
-                      <option>8</option>
-                    </Input>
-
-                    {/* EQUIPMENT */}
-                    <Input selectOnly
-                      onChange={(val) => {this.props.updateBooking({...this.props.booking, equipment: val})}}
-                      value={this.props.booking.equipment}
-                      iconTooltip='Golf equipment, skis, snowboard...'
-                      dropdownBtn
-                      style={selectStyle}
-                      iconStyle={{
-                        backgroundImage: 'url(/img/icons/sport_luggage.png)',
-                        fontSize: '0.7em'
-                      }}
-                    >
-                      <option>0</option>
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                    </Input>
-                  </Row>
-
-                  <Row style={{marginBottom: 0}}>
-                    {/* ANIMALS */}
-                    <Input selectOnly
-                      onChange={(val) => {this.props.updateBooking({...this.props.booking, animals: val})}}
-                      value={this.props.booking.animals}
-                      iconTooltip='Small animals'
-                      dropdownBtn
-                      style={selectStyle}
-                      iconStyle={{
-                        backgroundImage: 'url(/img/icons/animals.png)',
-                        fontSize: '0.7em'
-                      }}
-                    >
-                      <option>0</option>
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                    </Input>
-
-                    {/* CHILDREN */}
-                    <Input selectOnly
-                      onChange={(val) => {this.props.updateBooking({...this.props.booking, children: val})}}
-                      value={this.props.booking.children}
-                      iconTooltip='Children seats'
-                      dropdownBtn
-                      style={selectStyle}
-                      iconStyle={{
-                        backgroundImage: 'url(/img/icons/children.png)',
-                        fontSize: '0.7em'
-                      }}
-                    >
-                      <option>0</option>
-                      <option>1</option>
-                      <option>2</option>
-                    </Input>
-                  </Row>
-
-                  <Row style={{margin: '1em 0em', height: theme.spacing.inputHeight}}>
-                    <Checkbox 
-                      onClick={() => {
-                        let value = (this.props.booking.perHourBooking > 0)? 0 : 1
-                        this.props.updateBooking({
-                          ...this.props.booking, perHourBooking: value
-                        })
-                      }}
-                      active={(this.props.booking.perHourBooking > 0)? true : false}
-                    >
-                      Per-hour booking
-                    </Checkbox>
-                    <PerHourWrapper style={{opacity: this.props.booking.perHourBooking? 1 : 0}}>
-                      for
+                  <OptionsWrapper
+                    id="options-wrapper"
+                    style={{
+                      marginTop: i.expansion.interpolate(val => `-${val * 11.25}em`)
+                    }}
+                  >
+                    <Row style={{marginTop: 0}}>
+                      {/* PASSENGERS */}
                       <Input selectOnly
-                        onChange={(val) => {
-                          this.props.updateBooking({
-                            ...this.props.booking, perHourBooking: parseInt(val)
-                          })
-                        }}
-                        value={this.props.booking.perHourBooking + 'h'}
-                        iconTooltip='Per-hour booking duration'
-                        style={{
-                          width: '10em',
-                          marginLeft: theme.spacing.gutters[0],
-                          marginRight: theme.spacing.gutters[0],
-                          color: 'red'
-                        }}
+                        onChange={(val) => {this.props.updateBooking({...this.props.booking, passengers: val})}}
+                        value={this.props.booking.passengers}
+                        iconTooltip={"Passengers"}
+                        dropdownBtn
+                        style={selectStyle}
                         iconStyle={{
-                          backgroundImage: 'url(/img/icons/time.png)',
+                          backgroundImage: 'url(/img/icons/seats.png)',
                           fontSize: '0.7em'
                         }}
+                      >
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                      </Input>
+
+                      {/* LUGGAGE */}
+                      <Input selectOnly
+                        onChange={(val) => {this.props.updateBooking({...this.props.booking, luggage: val})}}
+                        value={this.props.booking.luggage}
+                        iconTooltip='Max. 20kg each. 1 piece of hand luggage is included per passenger.'
                         dropdownBtn
-                      >{
-                        (new Array(24)).fill(0).map((val, key) => {
-                          return <option key={`perHourBooking-${key+1}`} >{`${key+1}h`}</option>
-                        })
-                      }</Input>
-                      till {new moment(this.props.booking.hour, 'HH:mm').add(this.props.booking.perHourBooking, 'hours').format('HH:mm')}
-                    </PerHourWrapper>
-                  </Row>
-                </OptionsWrapper>
-              </div>
-            )
-          }}</Spring>
+                        style={selectStyle}
+                        iconStyle={{
+                          backgroundImage: 'url(/img/icons/luggage.png)',
+                          fontSize: '0.7em'
+                        }}
+                      >
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                      </Input>
+
+                      {/* EQUIPMENT */}
+                      <Input selectOnly
+                        onChange={(val) => {this.props.updateBooking({...this.props.booking, equipment: val})}}
+                        value={this.props.booking.equipment}
+                        iconTooltip='Golf equipment, skis, snowboard...'
+                        dropdownBtn
+                        style={selectStyle}
+                        iconStyle={{
+                          backgroundImage: 'url(/img/icons/sport_luggage.png)',
+                          fontSize: '0.7em'
+                        }}
+                      >
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                      </Input>
+                    </Row>
+
+                    <Row style={{marginBottom: 0}}>
+                      {/* ANIMALS */}
+                      <Input selectOnly
+                        onChange={(val) => {this.props.updateBooking({...this.props.booking, animals: val})}}
+                        value={this.props.booking.animals}
+                        iconTooltip='Small animals'
+                        dropdownBtn
+                        style={selectStyle}
+                        iconStyle={{
+                          backgroundImage: 'url(/img/icons/animals.png)',
+                          fontSize: '0.7em'
+                        }}
+                      >
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                      </Input>
+
+                      {/* CHILDREN */}
+                      <Input selectOnly
+                        onChange={(val) => {this.props.updateBooking({...this.props.booking, children: val})}}
+                        value={this.props.booking.children}
+                        iconTooltip='Children seats'
+                        dropdownBtn
+                        style={selectStyle}
+                        iconStyle={{
+                          backgroundImage: 'url(/img/icons/children.png)',
+                          fontSize: '0.7em'
+                        }}
+                      >
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                      </Input>
+                    </Row>
+
+                    <Row style={{margin: '1em 0em', minHeight: theme.spacing.inputHeight}}>
+                      <Checkbox 
+                        onClick={() => {
+                          let value = (this.props.booking.perHourBooking > 0)? 0 : 1
+                          this.props.updateBooking({
+                            ...this.props.booking, perHourBooking: value
+                          })
+                        }}
+                        active={(this.props.booking.perHourBooking > 0)? true : false}
+                      >
+                        Per-hour booking
+                      </Checkbox>
+                      <PerHourWrapper style={{opacity: this.props.booking.perHourBooking? 1 : 0}}>
+                        <Input selectOnly
+                          onChange={(val) => {
+                            this.props.updateBooking({
+                              ...this.props.booking, perHourBooking: parseInt(val)
+                            })
+                          }}
+                          value={this.props.booking.perHourBooking + 'h'}
+                          iconTooltip='Per-hour booking duration'
+                          style={{
+                            width: '10em',
+                            marginLeft: theme.spacing.gutters[0],
+                            marginRight: theme.spacing.gutters[0],
+                            color: 'red'
+                          }}
+                          iconStyle={{
+                            backgroundImage: 'url(/img/icons/time.png)',
+                            fontSize: '0.7em'
+                          }}
+                          dropdownBtn
+                        >{
+                          (new Array(24)).fill(0).map((val, key) => {
+                            return <option key={`perHourBooking-${key+1}`} >{`${key+1}h`}</option>
+                          })
+                        }</Input>
+                        till {new moment(this.props.booking.hour, 'HH:mm').add(this.props.booking.perHourBooking, 'hours').format('HH:mm')}
+                      </PerHourWrapper>
+                    </Row>
+                  </OptionsWrapper>
+                </div>
+              )
+            }}</Spring>
+
+            <Submit value='Start booking'/>
           </Form>
 
         </Page>
@@ -399,4 +387,14 @@ const PerHourWrapper = styled.div`
   padding-left: 0.15em;
   box-sizing: border-box;
   transition: opacity 0.1s;
+`
+
+const Overlapper = styled.div`
+  position: relative;
+  background-color: ${p => p.theme.colors.primary.bg.dark};
+  z-index: 50;
+
+  @media(min-width: ${p => p.theme.breakpoints.md}) {
+    background-color: ${p => p.theme.colors.primary.bg.main};
+  }
 `

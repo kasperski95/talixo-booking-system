@@ -41,12 +41,6 @@ class App extends Component {
           <ResxContext.Provider value={this.getResx()}>
             <React.Fragment>
               <Style />
-              <PopupHider
-                style={{display: this.props.popupHiderVisibility? 'block' : 'none'}}
-                onClick={() => {
-                  this.props.hidePopups() // only calendar
-                }}
-              />
               <AppWrapper>
                 <Router>
                   {/* <Link to="/booking/when">Home</Link>
@@ -72,11 +66,9 @@ class App extends Component {
 
 const mapStateToProps = state => ({
   lang: state.lang,
-  popupHiderVisibility: state.popupHiderVisibility,
   callbackOfPopupHider: state.callbackOfPopupHider
 })
 const mapDispatchToProps = dispatch => ({
   updateWindowWidthInfo: val => dispatch(updateWindowWidth(val)),
-  hidePopups: () => dispatch(updatePopupHiderVisibility(false))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(App)

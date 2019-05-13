@@ -8,7 +8,7 @@ import {
 } from '../../actions'
 import moment from 'moment'
 import { ResxContext } from '../resx'
-
+import PopupHider from '../atoms/PopupHider'
 
 
 
@@ -64,62 +64,68 @@ class DatePicker extends Component {
     
 
     return (
-      <Wrapper style={this.props.style}>
-        <Header>
-          <Arrow 
-            onClick={() => {
-              this.setState({date: moment(this.state.date).add(-1, 'months')})
-            }}
-            style={{flex: 'none', cursor: 'pointer'}}
-            dir='left'
-          />
-          <MonthLabel>{`${month} ${firstMonthDay.format('YYYY')}`}</MonthLabel>
-          <Arrow
-            onClick={() => {
-              this.setState({date: moment(this.state.date).add(1, 'months')})
-            }}
-            style={{flex: 'none', cursor: 'pointer'}}
-            dir='right'
-          />
-        </Header>
-        <Grid>
-          <Row>
-            {dayNames.map(dayName => <Day key={`dayname-${dayName}`}>{dayName}</Day>)}
-          </Row>
-          
-        {weeks.map(week => {
-          return (
-            <Row key={`week-${week[0].format('YYYY-MM-DD')}`}>{
-              week.map(day => {
-                let fromOtherMonth = false;
-                if (day < firstMonthDay || day > lastMonthDay)
-                  fromOtherMonth = true;
+      <React.Fragment>
+        <PopupHider
+          onClick={() => this.props.updateDatepickerVisibility(false)}
+          style={{display: this.props.datepickerIsVisible? 'block' : 'none'}}
+        />
+        <Wrapper style={{...this.props.style, display: this.props.datepickerIsVisible? 'block' : 'none'}}>
+          <Header>
+            <Arrow 
+              onClick={() => {
+                this.setState({date: moment(this.state.date).add(-1, 'months')})
+              }}
+              style={{flex: 'none', cursor: 'pointer'}}
+              dir='left'
+            />
+            <MonthLabel>{`${month} ${firstMonthDay.format('YYYY')}`}</MonthLabel>
+            <Arrow
+              onClick={() => {
+                this.setState({date: moment(this.state.date).add(1, 'months')})
+              }}
+              style={{flex: 'none', cursor: 'pointer'}}
+              dir='right'
+            />
+          </Header>
+          <Grid>
+            <Row>
+              {dayNames.map(dayName => <Day key={`dayname-${dayName}`}>{dayName}</Day>)}
+            </Row>
+            
+          {weeks.map(week => {
+            return (
+              <Row key={`week-${week[0].format('YYYY-MM-DD')}`}>{
+                week.map(day => {
+                  let fromOtherMonth = false;
+                  if (day < firstMonthDay || day > lastMonthDay)
+                    fromOtherMonth = true;
 
-                const disabled = day.isBefore(curDate, 'days')
-                const active = day.format('YYYY-MM-DD') === this.props.booking.date
+                  const disabled = day.isBefore(curDate, 'days')
+                  const active = day.format('YYYY-MM-DD') === this.props.booking.date
 
-                return (
-                  <Day key={`day-${day.format('YYYY-MM-DD')}`}
-                    fromOtherMonth={fromOtherMonth}
-                    disabled={disabled}
-                    active={active}
-                    onClick={() => {
-                      if (!disabled) {
-                        this.props.updateBooking({
-                          ...this.props.booking, date: day.format('YYYY-MM-DD')
-                        })
-                        this.props.updateDatepickerVisibility(false);
-                      }
-                    }}
-                  >
-                    {day.format('D')}
-                  </Day>
-                )
-              })
-            }</Row>
-          )})}
-        </Grid>
-      </Wrapper>
+                  return (
+                    <Day key={`day-${day.format('YYYY-MM-DD')}`}
+                      fromOtherMonth={fromOtherMonth}
+                      disabled={disabled}
+                      active={active}
+                      onClick={() => {
+                        if (!disabled) {
+                          this.props.updateBooking({
+                            ...this.props.booking, date: day.format('YYYY-MM-DD')
+                          })
+                          this.props.updateDatepickerVisibility(false);
+                        }
+                      }}
+                    >
+                      {day.format('D')}
+                    </Day>
+                  )
+                })
+              }</Row>
+            )})}
+          </Grid>
+        </Wrapper>
+      </React.Fragment>
     )
   }
 }
@@ -130,7 +136,8 @@ DatePicker.contextType = ResxContext;
 
 
 const mapStateToProps = state => ({
-  booking: state.booking
+  booking: state.booking,
+  datepickerIsVisible: state.datepickerVisibility
 })
 const mapDispatchToProps = dispatch => ({
   updateBooking: (payload) => dispatch(updateBooking(payload)),
@@ -149,7 +156,7 @@ const Wrapper = styled.div`
   position: absolute;
   right: 0;
   bottom: 0;
-  z-index: 1000;
+  z-index: 1001;
   padding: ${p => p.theme.spacing.gutters[0]};
   border-radius: ${p => p.theme.spacing.rounding};
   box-shadow: ${p => p.theme.shadows[0]};
