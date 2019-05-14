@@ -100,7 +100,33 @@ class When extends Component {
 
                 {/* TIME */}
                 <div style={{width: `10em`, marginLeft: `2em`, flex: `none`, display: `inline-block`}}>
-                  <Input label='At:'/>
+                  <Input 
+                    label='At:'
+                    dropdownBtn
+                    value={this.props.booking.time}
+                    onBlur={(time) => {     
+                      const t = moment(time, 'HH:mm')         
+                      if (t.isValid()) {
+                        this.props.updateBooking({...this.props.booking, time: t.format('HH:mm')})
+                        return {value: t.format('HH:mm'), error: false}
+                      }  
+                      return {value: null, error: 'Invalid time format, it should be HH:MM'}
+                    }}
+                    onSelect={time => {
+                      this.props.updateBooking({...this.props.booking, time: time})
+                    }}
+                  >{
+                    (new Array(4*24)).fill(0).map((val, key) => {
+                      const h = parseInt(key / 4)
+                      const m = (key * 15) % 60
+                      const time = moment(`${h}:${m}`, 'H:m').format('HH:mm')
+                      return (
+                        <option key={`time-${key+1}`} >
+                          {time}
+                        </option>
+                      )
+                    })
+                  }</Input>
                 </div>
               </Row>
 
@@ -137,11 +163,7 @@ class When extends Component {
               to={{expansion: this.props.optionsAreVisible? 0 : 1}}
             >{i => { // i(nterpolated props)
               return (
-                <div
-                  style={{
-                    // overflow: 'hidden'
-                  }}
-                >
+                <div>
                   <OptionsWrapper
                     id="options-wrapper"
                     style={{
@@ -151,7 +173,7 @@ class When extends Component {
                     <Row style={{marginTop: 0}}>
                       {/* PASSENGERS */}
                       <Input selectOnly
-                        onChange={(val) => {this.props.updateBooking({...this.props.booking, passengers: val})}}
+                        onSelect={(val) => {this.props.updateBooking({...this.props.booking, passengers: val})}}
                         value={this.props.booking.passengers}
                         iconTooltip={"Passengers"}
                         dropdownBtn
@@ -173,7 +195,7 @@ class When extends Component {
 
                       {/* LUGGAGE */}
                       <Input selectOnly
-                        onChange={(val) => {this.props.updateBooking({...this.props.booking, luggage: val})}}
+                        onSelect={(val) => {this.props.updateBooking({...this.props.booking, luggage: val})}}
                         value={this.props.booking.luggage}
                         iconTooltip='Max. 20kg each. 1 piece of hand luggage is included per passenger.'
                         dropdownBtn
@@ -196,7 +218,7 @@ class When extends Component {
 
                       {/* EQUIPMENT */}
                       <Input selectOnly
-                        onChange={(val) => {this.props.updateBooking({...this.props.booking, equipment: val})}}
+                        onSelect={(val) => {this.props.updateBooking({...this.props.booking, equipment: val})}}
                         value={this.props.booking.equipment}
                         iconTooltip='Golf equipment, skis, snowboard...'
                         dropdownBtn
@@ -216,7 +238,7 @@ class When extends Component {
                     <Row style={{marginBottom: 0}}>
                       {/* ANIMALS */}
                       <Input selectOnly
-                        onChange={(val) => {this.props.updateBooking({...this.props.booking, animals: val})}}
+                        onSelect={(val) => {this.props.updateBooking({...this.props.booking, animals: val})}}
                         value={this.props.booking.animals}
                         iconTooltip='Small animals'
                         dropdownBtn
@@ -235,7 +257,7 @@ class When extends Component {
 
                       {/* CHILDREN */}
                       <Input selectOnly
-                        onChange={(val) => {this.props.updateBooking({...this.props.booking, children: val})}}
+                        onSelect={(val) => {this.props.updateBooking({...this.props.booking, children: val})}}
                         value={this.props.booking.children}
                         iconTooltip='Children seats'
                         dropdownBtn
@@ -265,7 +287,7 @@ class When extends Component {
                       </Checkbox>
                       <PerHourWrapper style={{opacity: this.props.booking.perHourBooking? 1 : 0}}>
                         <Input selectOnly
-                          onChange={(val) => {
+                          onSelect={(val) => {
                             this.props.updateBooking({
                               ...this.props.booking, perHourBooking: parseInt(val)
                             })
@@ -275,9 +297,7 @@ class When extends Component {
                           style={{
                             width: '10em',
                             marginLeft: theme.spacing.gutters[0],
-                            marginRight: theme.spacing.gutters[0],
-                            color: 'red'
-                          }}
+                            marginRight: theme.spacing.gutters[0]                          }}
                           iconStyle={{
                             backgroundImage: 'url(/img/icons/time.png)',
                             fontSize: '0.7em'
@@ -288,7 +308,7 @@ class When extends Component {
                             return <option key={`perHourBooking-${key+1}`} >{`${key+1}h`}</option>
                           })
                         }</Input>
-                        till {new moment(this.props.booking.hour, 'HH:mm').add(this.props.booking.perHourBooking, 'hours').format('HH:mm')}
+                        till {new moment(this.props.booking.time, 'HH:mm').add(this.props.booking.perHourBooking, 'hours').format('HH:mm')}
                       </PerHourWrapper>
                     </Row>
                   </OptionsWrapper>

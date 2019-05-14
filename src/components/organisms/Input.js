@@ -8,12 +8,18 @@ import List from '../atoms/List'
 import PopupHider from '../atoms/PopupHider'
 import theme from '../theme'
 
-class Input extends Component {
-  state = {
-    extended: false,
-    iconTooltipVisible: false
-  }
+class Input extends Component {  
+  constructor(props) {
+    super(props)
 
+    this.state = {
+      extended: false,
+      iconTooltipVisible: false,
+      value: props.value,
+      inputRef: React.createRef()
+    }
+  }
+  
   render() {
     return (
       <Wrapper style={this.props.style} respectTooltipBtn={this.props.tooltip}>
@@ -58,10 +64,13 @@ class Input extends Component {
             </IconWrapper>
           </If>
           <If condition={this.props.label && !this.props.iconStyle}>
-            <InlineLabel>{this.props.label}</InlineLabel>
+            <InlineLabel onClick={() => this.state.inputRef.current.focus()}>
+              {this.props.label}
+            </InlineLabel>
           </If>
           <If condition={!this.props.noTextInput}>
             <TextInput
+              ref={this.state.inputRef}
               className={this.props.selectOnly? 'no-outline' : ''}
               style={{
                 cursor: this.props.selectOnly? 'pointer' : 'auto',
@@ -69,12 +78,26 @@ class Input extends Component {
               }}
               readOnly={this.props.selectOnly}
               roundLeft={!this.props.iconStyle && !this.props.label}
-              onChange={() => {
-                if (!this.props.selectOnly && this.props.onChange)
+              onChange={(e) => {
+                if (this.props.onChange)
                   this.props.onChange()
-              }}  
+                this.setState({...this.state, value: e.target.value})
+              }}
+              onFocus={() => {
+                if (this.props.value) {
+                  this.setState({...this.state, value: this.props.value})
+                }
+              }}
+              onBlur={(e) => {
+                if (this.props.onBlur) {
+                  const result = this.props.onBlur(e.target.value)
+                  if (!result.error) {
+                    this.setState({...this.state, value: result.value})
+                  }
+                }
+              }}
               placeholder={this.props.placeholder}
-              value={this.props.value}
+              value={this.props.selectOnly? this.props.value : this.state.value}
               
             />
           </If>
@@ -85,7 +108,8 @@ class Input extends Component {
                   this.setState({...this.state, expanded: true})
               }}
               style={{
-                opacity: this.props.selectOnly? 1 : 0.5              
+                cursor: this.props.children? 'pointer' : 'auto',              
+                opacity: this.props.children? 1 : 0.5              
               }}
             >
               <ArrowDown
@@ -121,9 +145,12 @@ class Input extends Component {
                 key: child.props.children,
                 className: className,
                 onClick: () => {
-                  if (this.props.onChange)
-                    this.props.onChange(child.props.children)
-                  this.setState({expanded: false})
+                  if (this.props.onSelect)
+                    this.props.onSelect(child.props.children)
+                  this.setState({
+                    expanded: false,
+                    value: child.props.children
+                  })
                 }
               })
             })}

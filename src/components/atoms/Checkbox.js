@@ -26,6 +26,7 @@ const CheckboxWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: -0.25em;
 `
 
 const Checkbox = styled.div`
@@ -36,8 +37,8 @@ const Checkbox = styled.div`
   margin: 0.25em;
   box-sizing: border-box; 
   background-color: white;
-  background-image: ${p => (p.active || p.checked)? "url('/img/icons/check.svg')" : 'none'};
-  background-position: center center;
+  background-image: url('/img/icons/check.svg');
+  background-position: ${p => (p.active || p.checked)? 'center center' : '9999px center'};
   background-size: contain;
   background-repeat: no-repeat;
 `
