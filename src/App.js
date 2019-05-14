@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Route } from "react-router-dom"
 import { ThemeProvider } from 'styled-components'
 import resx, { ResxContext } from './components/resx'
 
@@ -8,13 +8,11 @@ import WhenPage from './components/pages/When'
 import WhatPage from './components/pages/What'
 import PaymentPage from './components/pages/Payment'
 import AppWrapper from './components/atoms/AppWrapper'
-import PopupHider from './components/atoms/PopupHider'
 import theme from './components/theme'
 import Style from './components/Style'
 
 import { 
-  updateWindowWidth,
-  updatePopupHiderVisibility
+  updateWindowWidth
 } from './actions/'
 
 
@@ -43,15 +41,14 @@ class App extends Component {
               <Style />
               <AppWrapper>
                 <Router>
-                  {/* <Link to="/booking/when">Home</Link>
-                  <Link to="/booking/what">About</Link>
-                  <Link to="/booking/details-and-payment">Users</Link> */}
-                  
-                  <Route exact path={["/", "/booking", "/booking/when"]} 
-                    component={() => <WhenPage />} />
+                  <Route 
+                    exact path={["/", "/booking", "/booking/when"]} 
+                    render={ routeProps => <WhenPage {...routeProps}/> }
+                  />
                    
                   <Route path="/booking/what"
-                    component={() => <WhatPage />} />
+                    render={ routeProps => <WhatPage {...routeProps}/> }
+                  />
 
                   <Route path="/booking/details-and-payment"
                     component={() => <PaymentPage />} />

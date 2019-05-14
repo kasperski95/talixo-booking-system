@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Spring, animated, interpolate } from 'react-spring/renderprops'
+import { Spring, animated } from 'react-spring/renderprops'
+import OrderedNavigation from '../organisms/OrderedNavigation'
 import Header from '../organisms/Header'
 import Input from '../organisms/Input'
 import DatePicker from '../organisms/DatePicker'
@@ -23,49 +24,38 @@ import Submit from '../atoms/Submit'
 import moment from 'moment'
 
 
+
 class When extends Component {
   
   render() {
     const data = this.context
     document.title = `[1/3] ${data.title} - ${data.whenAndWhen}`
 
+    const { ...props } = this.props
 
     return (
       <React.Fragment>
         <Header />
         
         <Page>
-          <SM
-            children={
-              <StylishOrderedList sm
-                style={{boxSizing: `border-box`, padding: `0`}}
-              >
-                <div style={{display: `flex`}}>
-                  <div style={{flex: 1}}>
-                    <li className='active'>{data.whenAndWhen}</li>
-                  </div>
-                  <div style={{flex: `none`}}>
-                    <li></li>
-                    <li></li>
-                  </div>
-                </div>
-              </StylishOrderedList>
-            }
-            else={
-              <StylishOrderedList style={{textAlign: `center`}}>
-                <li className='active'>{data.whenAndWhen}</li>
-                <li>{data.chooseCar}</li>
-                <li>{data.detailsAndPayment}</li>
-              </StylishOrderedList>
-            }
+          <OrderedNavigation active={0}
+            data={[
+              {children: data.whenAndWhen},
+              {children: data.chooseCar},
+              {children: data.detailsAndPayment}
+            ]}
           />
 
 
-          <Form>
+          <Form onSubmit={(e) => {
+            e.preventDefault()
+            this.props.history.push('/booking/what');
+          }}>
             <Overlapper>
               <Row>
                 {/* FROM */}
                 <Input
+                  value={this.props.booking.from}
                   label='Pick up:'
                   placeholder='e.g. Torstraße 124, Berlin'
                   tooltip='Please provide a street address, airport name or hotel name.'
@@ -387,7 +377,7 @@ const Label = styled.div`
   }
 `
 
-const Form = styled.div`
+const Form = styled.form`
   margin-top: ${p => p.theme.spacing.gutters[1]};
 `
 

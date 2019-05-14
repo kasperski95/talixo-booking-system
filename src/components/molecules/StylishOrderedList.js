@@ -32,11 +32,11 @@ export default styled.ol`
     transform: translateY(0.1em);
   }
 
-  li:last-of-type {
+  div:last-of-type > li:last-of-type {
     margin-right: 0
   }
 
-  li:last-of-type::before {
+  div:last-of-type > li:last-of-type::before {
     margin-right: ${p => p.sm? '0em' : p.theme.spacing.gutters[0]};
   }
 
@@ -45,4 +45,19 @@ export default styled.ol`
     color: ${p => p.theme.colors.primary.txt.main};
     margin-right: ${p => p.theme.spacing.gutters[0]} !important;
   }
+
+  .clickable {
+    cursor: pointer;
+  }
+
+  .clickable::before {
+    color: ${p => p.theme.colors.primary.txt.main};
+    transition: border-color 0.1s;
+  }
+
+  .clickable:hover::before {
+    border-color: ${p => p.theme.colors.accent.light};
+  }
+
+  
 `

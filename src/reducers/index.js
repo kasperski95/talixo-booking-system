@@ -16,8 +16,11 @@ const initialState = {
   lang: 'en',
   windowWidth: parseInt(document.documentElement.clientWidth),
   booking: {
+    from: '',
+    to: '',
     date: moment().format('YYYY-MM-DD'),
     time: moment().add(3, 'hours').format('HH:mm'),
+    voucher: '',
     passengers: 1,
     luggage: 0,
     equipment: 0,
@@ -25,6 +28,14 @@ const initialState = {
     children: 0,
     perHourBooking: 0
   },
+
+  errors: {
+    from: '',
+    to: '',
+    time: '',
+    voucher: ''
+  },
+
   optionsExpanded: true,
   datepickerVisibility: false,
   popupHiderVisibility: false
