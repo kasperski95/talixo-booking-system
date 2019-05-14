@@ -154,15 +154,21 @@ const Wrapper = styled.div`
   color: ${p => p.theme.colors.base.txt.main};
   background-color: ${p => p.theme.colors.base.bg.main};
   position: absolute;
-  right: 0;
+  left: 50%;
   bottom: 0;
   z-index: 1001;
   padding: ${p => p.theme.spacing.gutters[0]};
   border-radius: ${p => p.theme.spacing.rounding};
   box-shadow: ${p => p.theme.shadows[0]};
-  transform: translateY(calc(100% + 0.125em));
+  transform: translate(-50%, calc(100% + 0.125em));
   overflow: hidden;
   transition: opacity 0.1s;
+
+  @media(min-width: ${p => p.theme.breakpoints.md}) {
+    left: auto;
+    right: 0;
+    transform: translate(0, calc(100% + 0.125em));
+  }
 `
 
 const Header = styled.div`

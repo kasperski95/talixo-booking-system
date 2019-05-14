@@ -146,10 +146,10 @@ class When extends Component {
                 }}
               >
                 <div style={{width: '100%'}}>
-                  For ...
+                  {`For ${this.props.booking.passengers > 1? '1-'+this.props.booking.passengers : '1'} ${this.props.booking.passengers > 1? 'passengers' : 'passenger'} with 1-${Math.max(this.props.booking.luggage, 2)} bags`}
                 </div>
                 <DropDownBtn animate
-                  label='more options'
+                  label={`${this.props.optionsAreVisible? 'hide' : 'more'} options`}
                   onClick={() => {this.props.updateOptionsExpansion(!this.props.optionsAreVisible)}}
                   expanded={this.props.optionsAreVisible}
                   style={{
