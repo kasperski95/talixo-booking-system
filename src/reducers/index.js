@@ -37,7 +37,7 @@ const initialState = {
     voucher: ''
   },
 
-  optionsExpanded: true,
+  optionsExpanded: false,
   datepickerVisibility: false,
   popupHiderVisibility: false
 }
