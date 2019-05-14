@@ -31,6 +31,25 @@ const theme = {
     accent: {
       light: '#fe7d0a',
       main: '#ff4800'
+    },
+
+    info: {
+      bg: {
+        main: '#111'
+      },
+      txt: {
+        main: '#888'
+      }
+    },
+
+    danger: {
+      bg: {
+        main: '#D11'
+      },
+      txt: {
+        main: 'white',
+        dark: '#E33'
+      }
     }
   },
 

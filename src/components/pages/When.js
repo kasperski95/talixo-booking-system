@@ -15,7 +15,8 @@ import styled from 'styled-components'
 import { 
   updateDatepickerVisibility,
   updateBooking,
-  updateOptionsExpansion
+  updateOptionsExpansion,
+  updateErrors
 } from '../../actions'
 import Row from '../atoms/Row'
 import theme from '../theme'
@@ -30,8 +31,6 @@ class When extends Component {
   render() {
     const data = this.context
     document.title = `[1/3] ${data.title} - ${data.whenAndWhen}`
-
-    const { ...props } = this.props
 
     return (
       <React.Fragment>
@@ -49,13 +48,36 @@ class When extends Component {
 
           <Form onSubmit={(e) => {
             e.preventDefault()
-            this.props.history.push('/booking/what');
+            
+            let errors = {}
+            let inputs = Array.from(e.target.getElementsByTagName('input'))
+           
+            inputs.forEach(el => {
+              const nameAttr = el.attributes['name'];
+              if (nameAttr) {
+                const requireAttr = el.attributes['data-require'];
+                if (nameAttr.value && requireAttr && requireAttr.value === 'true' && !el.value) {
+                  errors[nameAttr.value] = 'This field is required'
+                }
+              }
+            
+            })
+
+            if (Object.keys(errors).length > 0) {
+              this.props.updateErrors({...this.props.errors, ...errors})
+            } else {
+              this.props.history.push('/booking/what');
+            }
+            
           }}>
             <Overlapper>
               <Row>
                 {/* FROM */}
-                <Input
+                <Input name='from' required
                   value={this.props.booking.from}
+                  error={this.props.errors.from}
+                  onFocus={() => {this.props.updateErrors({...this.props.errors, from: ''})}}
+                  onBlur={val => {this.props.updateBooking({...this.props.booking, from: val}); return val;}}
                   label='Pick up:'
                   placeholder='e.g. Torstraße 124, Berlin'
                   tooltip='Please provide a street address, airport name or hotel name.'
@@ -65,7 +87,11 @@ class When extends Component {
 
               <Row>
                 {/* TO */}
-                <Input
+                <Input name='to' required
+                  value={this.props.booking.to}
+                  error={this.props.errors.to}
+                  onFocus={() => {this.props.updateErrors({...this.props.errors, to: ''})}}
+                  onBlur={val => {this.props.updateBooking({...this.props.booking, to: val}); return val;}}
                   label='Destination:'
                   placeholder='e.g. Tegel Airport'
                   tooltip='Please provide a street address, airport name or hotel name.'
@@ -81,7 +107,9 @@ class When extends Component {
                     <DateButtons />
                     <DatePickerWrapper>
                       <DatePickerBtn
-                        onClick={() => this.props.updateDatepickerVisibility(!this.props.datepickerIsVisible)}
+                        onClick={() => {
+                          this.props.updateDatepickerVisibility(!this.props.datepickerIsVisible)
+                        }}
                       />
                       <DatePicker />
                     </DatePickerWrapper>
@@ -90,20 +118,33 @@ class When extends Component {
 
                 {/* TIME */}
                 <div style={{width: `10em`, marginLeft: `2em`, flex: `none`, display: `inline-block`}}>
-                  <Input 
+                  <Input name='time' required 
+                    error={this.props.errors.time}
                     label='At:'
                     dropdownBtn
                     value={this.props.booking.time}
                     onBlur={(time) => {     
                       const t = moment(time, 'HH:mm')         
                       if (t.isValid()) {
+                        if (moment().add(1, 'hours').isAfter(`${this.props.booking.date} ${time}`, 'minutes')) {
+                          this.props.updateErrors({...this.props.errors, time: 'Booking has to be at least 60 minutes in the future'})
+                          return null
+                        }
+
+                        this.props.updateErrors({...this.props.errors, time: ''})
                         this.props.updateBooking({...this.props.booking, time: t.format('HH:mm')})
-                        return {value: t.format('HH:mm'), error: false}
-                      }  
-                      return {value: null, error: 'Invalid time format, it should be HH:MM'}
+                        return t.format('HH:mm')
+                      } 
+                      this.props.updateErrors({...this.props.errors, time: 'Invalid time format, it should be HH:MM'})
+                      return null
                     }}
                     onSelect={time => {
+                      if (moment().add(1, 'hours').isAfter(`${this.props.booking.date} ${time}`, 'minutes')) {
+                        this.props.updateErrors({...this.props.errors, time: 'Booking has to be at least 60 minutes in the future'})
+                        return null
+                      }
                       this.props.updateBooking({...this.props.booking, time: time})
+                      this.props.updateErrors({...this.props.errors, time: ''})
                     }}
                   >{
                     (new Array(4*24)).fill(0).map((val, key) => {
@@ -122,8 +163,10 @@ class When extends Component {
 
               <Row>
                 {/* VOUCHER */}
-                <Input
+                <Input name='voucher'
                   label='Voucher code (optional):'
+                  value={this.props.booking.voucher}
+                  onBlur={val => {this.props.updateBooking({...this.props.booking, voucher: val}); return val;}}
                 />
               </Row>
               
@@ -162,7 +205,7 @@ class When extends Component {
                   >
                     <Row style={{marginTop: 0}}>
                       {/* PASSENGERS */}
-                      <Input selectOnly
+                      <Input name='passengers' selectOnly
                         onSelect={(val) => {this.props.updateBooking({...this.props.booking, passengers: val})}}
                         value={this.props.booking.passengers}
                         iconTooltip={"Passengers"}
@@ -184,7 +227,7 @@ class When extends Component {
                       </Input>
 
                       {/* LUGGAGE */}
-                      <Input selectOnly
+                      <Input name='luggage' selectOnly
                         onSelect={(val) => {this.props.updateBooking({...this.props.booking, luggage: val})}}
                         value={this.props.booking.luggage}
                         iconTooltip='Max. 20kg each. 1 piece of hand luggage is included per passenger.'
@@ -207,7 +250,7 @@ class When extends Component {
                       </Input>
 
                       {/* EQUIPMENT */}
-                      <Input selectOnly
+                      <Input name='equipment' selectOnly
                         onSelect={(val) => {this.props.updateBooking({...this.props.booking, equipment: val})}}
                         value={this.props.booking.equipment}
                         iconTooltip='Golf equipment, skis, snowboard...'
@@ -227,7 +270,7 @@ class When extends Component {
 
                     <Row style={{marginBottom: 0}}>
                       {/* ANIMALS */}
-                      <Input selectOnly
+                      <Input name='animals' selectOnly
                         onSelect={(val) => {this.props.updateBooking({...this.props.booking, animals: val})}}
                         value={this.props.booking.animals}
                         iconTooltip='Small animals'
@@ -246,7 +289,7 @@ class When extends Component {
                       </Input>
 
                       {/* CHILDREN */}
-                      <Input selectOnly
+                      <Input name='children' selectOnly
                         onSelect={(val) => {this.props.updateBooking({...this.props.booking, children: val})}}
                         value={this.props.booking.children}
                         iconTooltip='Children seats'
@@ -276,7 +319,7 @@ class When extends Component {
                         Per-hour booking
                       </Checkbox>
                       <PerHourWrapper style={{opacity: this.props.booking.perHourBooking? 1 : 0}}>
-                        <Input selectOnly
+                        <Input name='perHourBooking' selectOnly
                           onSelect={(val) => {
                             this.props.updateBooking({
                               ...this.props.booking, perHourBooking: parseInt(val)
@@ -287,7 +330,8 @@ class When extends Component {
                           style={{
                             width: '10em',
                             marginLeft: theme.spacing.gutters[0],
-                            marginRight: theme.spacing.gutters[0]                          }}
+                            marginRight: theme.spacing.gutters[0]                          
+                          }}
                           iconStyle={{
                             backgroundImage: 'url(/img/icons/time.png)',
                             fontSize: '0.7em'
@@ -321,13 +365,15 @@ When.contextType = ResxContext;
 
 const mapStateToProps = state => ({
   booking: state.booking,
+  errors: state.errors,
   datepickerIsVisible: state.datepickerVisibility,
   optionsAreVisible: state.optionsExpanded
 })
 const mapDispatchToProps = dispatch => ({
   updateDatepickerVisibility: payload => dispatch(updateDatepickerVisibility(payload)),
   updateBooking: payload => dispatch(updateBooking(payload)),
-  updateOptionsExpansion: payload => dispatch(updateOptionsExpansion(payload))
+  updateOptionsExpansion: payload => dispatch(updateOptionsExpansion(payload)),
+  updateErrors: payload => dispatch(updateErrors(payload))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(When)
 

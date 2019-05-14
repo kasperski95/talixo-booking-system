@@ -7,7 +7,8 @@ import {
   UPDATE_DATEPICKER_VISIBILITY,
   UPDATE_POPUP_HIDER_VISIBILITY,
   SET_CALLBACK_OF_POPUP_HIDER,
-  UPDATE_OPTIONS_EXPANSION
+  UPDATE_OPTIONS_EXPANSION,
+  UPDATE_ERRORS
  } from '../constants/action-types'
 
 
@@ -18,7 +19,7 @@ const initialState = {
   booking: {
     from: '',
     to: '',
-    date: moment().format('YYYY-MM-DD'),
+    date: moment().add(3, 'hours').format('YYYY-MM-DD'),
     time: moment().add(3, 'hours').format('HH:mm'),
     voucher: '',
     passengers: 1,
@@ -86,6 +87,10 @@ export default function rootReducer(state=initialState, action) {
 
     case UPDATE_OPTIONS_EXPANSION:
       state = {...state, optionsExpanded: action.payload}
+      break
+
+    case UPDATE_ERRORS:
+      state = {...state, errors: action.payload}
       break
 
     default: break

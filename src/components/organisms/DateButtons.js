@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { ResxContext } from '../resx'
 import styled from 'styled-components'
 import moment from 'moment'
-import { updateBooking } from '../../actions'
+import { updateBooking, updateErrors } from '../../actions'
 
 
 
@@ -59,7 +59,14 @@ class DateButtons extends Component {
         {dates.map(el => {
           const active = el.format('YYYY-MM-DD') === this.props.booking.date
           return <Day
-            onClick={() => this.props.updateBooking({...this.props.booking, date: el.format('YYYY-MM-DD')})}
+            onClick={() => {
+              if (moment().add(1, 'hours').isAfter(`${el.format('YYYY-MM-DD')} ${this.props.booking.time}`, 'minutes')) {
+                this.props.updateErrors({...this.props.errors, time: 'Booking has to be at least 60 minutes in the future'})
+                return null;
+              }
+              this.props.updateErrors({...this.props.errors, time: ''})
+              this.props.updateBooking({...this.props.booking, date: el.format('YYYY-MM-DD')})
+            }}
             key={`day-${el.format('YYYY-MM-DD')}`}
             active={active}
             date={el.format('YYYY-MM-DD')}
@@ -75,10 +82,12 @@ DateButtons.contextType = ResxContext;
 
 
 const mapStateToProps = state => ({
-  booking: state.booking
+  booking: state.booking,
+  errors: state.errors
 })
 const mapDispatchToProps = dispatch => ({
-  updateBooking: (payload) => dispatch(updateBooking(payload))
+  updateBooking: (payload) => dispatch(updateBooking(payload)),
+  updateErrors: payload => dispatch(updateErrors(payload))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DateButtons)
 

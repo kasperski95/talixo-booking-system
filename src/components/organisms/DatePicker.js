@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import Arrow from '../atoms/Arrow'
 import {
   updateBooking,
-  updateDatepickerVisibility
+  updateDatepickerVisibility,
+  updateErrors
 } from '../../actions'
 import moment from 'moment'
 import { ResxContext } from '../resx'
@@ -110,6 +111,11 @@ class DatePicker extends Component {
                       active={active}
                       onClick={() => {
                         if (!disabled) {
+                          if (moment().add(1, 'hours').isAfter(`${day.format('YYYY-MM-DD')} ${this.props.booking.time}`, 'minutes')) {
+                            this.props.updateErrors({...this.props.errors, time: 'Booking has to be at least 60 minutes in the future'})
+                            return null;
+                          }
+                          this.props.updateErrors({...this.props.errors, time: ''})
                           this.props.updateBooking({
                             ...this.props.booking, date: day.format('YYYY-MM-DD')
                           })
@@ -137,12 +143,13 @@ DatePicker.contextType = ResxContext;
 
 const mapStateToProps = state => ({
   booking: state.booking,
+  errors: state.errors,
   datepickerIsVisible: state.datepickerVisibility
 })
 const mapDispatchToProps = dispatch => ({
   updateBooking: (payload) => dispatch(updateBooking(payload)),
-  updateDatepickerVisibility: payload => dispatch(updateDatepickerVisibility(payload))
-
+  updateDatepickerVisibility: payload => dispatch(updateDatepickerVisibility(payload)),
+  updateErrors: payload => dispatch(updateErrors(payload))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DatePicker)
 

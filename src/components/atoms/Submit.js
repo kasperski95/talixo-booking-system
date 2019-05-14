@@ -11,6 +11,7 @@ export default styled.input.attrs(p => ({
   background-color: ${p => p.theme.colors.accent.main};
   border-radius: calc(${p => p.theme.spacing.rounding} / 1.625);
   border: none;
+  cursor: pointer;
 
   @media (min-width: ${[p => p.theme.breakpoints.md]}) {
     width: 12.5em;

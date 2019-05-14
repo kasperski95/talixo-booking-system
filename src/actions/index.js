@@ -6,7 +6,8 @@ import {
   UPDATE_DATEPICKER_VISIBILITY,
   UPDATE_POPUP_HIDER_VISIBILITY,
   SET_CALLBACK_OF_POPUP_HIDER,
-  UPDATE_OPTIONS_EXPANSION
+  UPDATE_OPTIONS_EXPANSION,
+  UPDATE_ERRORS,
  } from '../constants/action-types'
 
 export function updateDdmVisibility(payload) { return {type: UPDATE_DDM_VISIBILITY, payload}; }
@@ -17,4 +18,4 @@ export function updateDatepickerVisibility(payload) { return {type: UPDATE_DATEP
 export function updatePopupHiderVisibility(payload) { return {type: UPDATE_POPUP_HIDER_VISIBILITY, payload}}
 export function setCallbackOfPopupHider(payload) { return {type: SET_CALLBACK_OF_POPUP_HIDER, payload}}
 export function updateOptionsExpansion(payload) { return {type: UPDATE_OPTIONS_EXPANSION, payload}}
-
+export function updateErrors(payload) { return {type: UPDATE_ERRORS, payload}}

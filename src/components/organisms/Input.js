@@ -15,30 +15,49 @@ class Input extends Component {
     this.state = {
       extended: false,
       iconTooltipVisible: false,
+      tooltipVisible: false,
       value: props.value,
       inputRef: React.createRef()
     }
   }
   
   render() {
+    const error = this.state.tooltipVisible? false : this.props.error
+
     return (
       <Wrapper style={this.props.style} respectTooltipBtn={this.props.tooltip}>
         <If condition={this.props.label && !this.props.iconStyle}>
           <Label>{this.props.label}</Label>
         </If>
         <If condition={this.props.tooltip}>
-          <TooltipBtn>?</TooltipBtn>
-          <Tooltip className='tooltip'>
-            <Triangle color='black' size='12px' style={{position: 'absolute', top: '-12px'}} />
-            {this.props.tooltip}
-          </Tooltip>
-          
+          <TooltipBtn
+            onMouseOver={() => this.setState({...this.state, tooltipVisible: true})}
+            onMouseOut={() => this.setState({...this.state, tooltipVisible: false})}
+          >?</TooltipBtn>
         </If>
+        <Tooltip
+          style={{display: `${(this.state.tooltipVisible || this.props.error)? 'block' : 'none'}`}}
+          error={error}
+        >
+          {this.state.tooltipVisible? this.props.tooltip : (this.props.error? this.props.error : '')}
+        </Tooltip>
+        <Triangle up
+          color={`${error? theme.colors.danger.bg.main : theme.colors.info.bg.main}`}
+          size='12px'
+          style={{
+            display: (this.state.tooltipVisible || this.props.error)? 'block' : 'none',
+            position: 'absolute',
+            bottom: '-0.125em',
+            left: theme.spacing.gutters[1]
+          }}
+        />
+
+          
+        
         <If condition={this.props.iconTooltip}>
           <Tooltip top
             style={{display: this.state.iconTooltipVisible? 'block' : 'none'}}
           >
-            {/* <Triangle down color='black' size='12px' style={{position: 'absolute', bottom: '-12px'}} /> */}
             {this.props.iconTooltip}
           </Tooltip>
         </If>
@@ -70,8 +89,11 @@ class Input extends Component {
           </If>
           <If condition={!this.props.noTextInput}>
             <TextInput
+              name={this.props.name}
+              data-require={this.props.required? 'true' : ''}
               ref={this.state.inputRef}
               className={this.props.selectOnly? 'no-outline' : ''}
+              error={this.props.error}
               style={{
                 cursor: this.props.selectOnly? 'pointer' : 'auto',
                 textAlign: this.props.selectOnly? 'center' : 'left'
@@ -83,16 +105,18 @@ class Input extends Component {
                   this.props.onChange()
                 this.setState({...this.state, value: e.target.value})
               }}
-              onFocus={() => {
+              onFocus={(e) => {
                 if (this.props.value) {
                   this.setState({...this.state, value: this.props.value})
                 }
+                if (this.props.onFocus)
+                  this.props.onFocus(e)
               }}
               onBlur={(e) => {
                 if (this.props.onBlur) {
                   const result = this.props.onBlur(e.target.value)
-                  if (!result.error) {
-                    this.setState({...this.state, value: result.value})
+                  if (result) {
+                    this.setState({...this.state, value: result})
                   }
                 }
               }}
@@ -248,10 +272,14 @@ const TextInput = styled.input`
   width: 100%;
   height: 100%;
   border: none;
-  font-weight: 300;
+  font-weight: ${p => p.error? 400 : 300};
+  background-color: transparent;
+  color: ${p => p.error? p.theme.colors.danger.txt.dark : p.theme.colors.base.txt.main};
+
 
   &::placeholder {
     opacity: 0.5;
+    font-weight: 300;
   }
 `
  
@@ -282,17 +310,18 @@ const TooltipBtn = styled.div`
 `
 
 const Tooltip = styled.div`
-  display: none;
+  display: ${p => p.error? 'block' : 'none'};
   font-size: 0.875em;
   position: absolute;
   ${p => p.top? 'top: 0' : 'bottom: 0'};
   width: 100%;
   box-sizing: border-box;
   padding: 0.5em 0.75em;
-  background-color: black;
+  background-color: ${p => p.error? p.theme.colors.danger.bg.main : p.theme.colors.info.bg.main};
   border-radius: ${p => p.theme.spacing.rounding};
-  color: rgba(255,255,255,0.75);
+  color: ${p => p.error? p.theme.colors.danger.txt.main : p.theme.colors.info.txt.main};
   z-index: 100;
   transform: translateY(calc(${p => p.top? '-100% - 0.125em' : '100% + 0.125em'}));
   box-shadow: ${p => p.theme.shadows[0]};
+
 `
