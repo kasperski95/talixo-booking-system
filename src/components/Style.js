@@ -5,6 +5,11 @@ const Style = createGlobalStyle`
     font-family: 'Open Sans', sans-serif;
   }
   
+  input {
+    /* chrome vs rest */
+    min-width: 1em; 
+  }
+
   html {
     background-color: ${props => props.theme.colors.base.bg.dark};
   }
