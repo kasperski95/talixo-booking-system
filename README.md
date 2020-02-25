@@ -1,3 +1,12 @@
+# Talixo internship task
+
+## Result
+I was given 5 days to recreate website. Every component is custom (date picker, selects, ...).
+
+![result](documentation/result.png)
+
+## Initialization
+
 In the project directory, run:
 
 ### `npm i`
